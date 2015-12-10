@@ -18,8 +18,8 @@ before_install:
 - eval $(ssh-agent)//将密钥加入系统
 - ssh-add ~/.ssh/id_rsa
 - cp ssh_config ~/.ssh/config //修改 git 信息
-- git config --global "叶帆"
-- git config --global yeziahehe@gmail.com
+- git config --global user.name "叶帆"
+- git config --global user.email yeziahehe@gmail.com
 - git clone -b master git@github.com:Coryphaei/coryphaei.github.io.git .deploy_git
 
 # 配置 Hexo
