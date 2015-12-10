@@ -16,8 +16,8 @@ before_install:
 - eval $(ssh-agent)//将密钥加入系统
 - ssh-add ~/.ssh/id_rsa
 - cp ssh_config ~/.ssh/config //修改 git 信息
-- git config --global 叶帆 "你的姓名"
-- git config --global yeziahehe@gmail.com 你的邮箱
+- git config --global "叶帆"
+- git config --global yeziahehe@gmail.com
 
 # 配置 Hexo
 install:
