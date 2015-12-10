@@ -9,6 +9,8 @@ branches:
   only:
   - blog //这个分支应当使用自己的 Dev repo
 
+sudo: false
+
 before_install:
 - openssl aes-256-cbc -K $encrypted_b83a281ef741_key -iv $encrypted_b83a281ef741_iv
   -in travis.enc -out ~/.ssh/id_rsa -d
@@ -18,6 +20,7 @@ before_install:
 - cp ssh_config ~/.ssh/config //修改 git 信息
 - git config --global "叶帆"
 - git config --global yeziahehe@gmail.com
+- git clone -b master git@github.com:Coryphaei/coryphaei.github.io.git .deploy_git
 
 # 配置 Hexo
 install:
