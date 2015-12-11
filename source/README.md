@@ -22,6 +22,10 @@ Coryphaei是苏州倡予信息科技的英文名称。
 
 英文的意思为领头羊，和我们放到Organization上的Logo寓意一样。
 
+# 使用方法
+因为Hexo的机制，多人写作借助了Travis CI。
+[使用方法](https://github.com/Coryphaei/coryphaei.github.io/tree/blog)
+
 # Contributor
 Ivan
 [GitHub](https://github.com/yeziahehe)
@@ -34,3 +38,10 @@ Mail: twist.zheng@coryphaei.com
 Basti
 [GitHub](https://github.com/basti-shi031)
 Mail: 876572078@qq.com
+
+# License
+Write by [Ivan](https://github.com/yeziahehe)
+
+Support By [Hexo](https://github.com/hexojs/hexo)
+
+Available under the MIT license. See the LICENSE file for more info.
