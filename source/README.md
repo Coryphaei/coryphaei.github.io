@@ -1,5 +1,7 @@
 ![Logo](http://7xkvt5.com1.z0.glb.clouddn.com/coryphaei2015638117579534.gif)
 
+![Travis CI](https://travis-ci.org/Coryphaei/coryphaei.github.io.svg)
+
 # 写在前面
 为了更好的进行技术的分享，建立我们小团队的[Blog](http://coryphaei.github.io.)。
 
