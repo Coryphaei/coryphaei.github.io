@@ -7,8 +7,16 @@
 合作者按照如下步骤进行博客提交和编写。
 
 ## Step 1
+第一次clone
+
 ```bash
-git clone git@github.com:Coryphaei/coryphaei.github.io.git
+https://github.com/Coryphaei/coryphaei.github.io.git
+```
+
+否则先
+
+```bash
+git pull origin blog
 ```
 
 ## Step 2
