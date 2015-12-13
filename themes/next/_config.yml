@@ -19,7 +19,7 @@ feed:
   hub:
 
 # Specify the date when the site was setup
-#since: 2015
+since: 2015
 
 
 
@@ -97,7 +97,7 @@ social_icons:
 
 
 # Sidebar Avatar
-#avatar:
+avatar: http://7xp57v.com1.z0.glb.clouddn.com/coryphaeicoryphaei.gif
 
 
 # Social links
