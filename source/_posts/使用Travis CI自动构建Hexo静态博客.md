@@ -89,14 +89,12 @@ Travis CI本身已经是很好的自动构建的工具，而这里使用的原�
 #### Travis CI - build and push -> Pages repo
 Travis CI 的自动化构建完全依靠唯一的`.travis.yml`脚本文件。需要在此文件中添加构建环境、构建Hexo、生成博客及后续push到Pages repo的全部脚本。
 
-##### 生成SSH Key
+- 生成SSH Key
 要做到Travis CI向Pages repo自动推送就必须用到Github SSH Key，这样做的目的是免去Hexo部署时候输入密码的步骤。生成SSH Key的操作参照GitHub的官网即可：[Github SSH Key](https://help.github.com/articles/generating-ssh-keys/)。
-
 这样会得到`id_rsa.pub`和`id_rsa`两个秘钥，我们将`id_rsa.pub`添加到了github，下面要加密`id_rsa`这个私钥并且上传到Travis。
-
 > 注意：这个SSH key不应该是你账号的全局SSH Key，这样Travis CI就获得了你所有代码库的提交权限。仅仅只需要把SSH Key添加到当前repo的setting中的key下面即可。
 
-##### Travis CI 环境
+- Travis CI 环境
 ```bash
 $ sudo cp ~/.ssh/id_rsa / #将上一步得到的`id_rsa`复制到根目录下
 $ vim .travis.yml #创建.travis.yml
@@ -104,10 +102,9 @@ $ gem install travis #安装Travis CI
 $ travis login --auto #登录Travis CI，需要输入GitHub的账号密码
 $ travis encrypt-file ssh_key --add #加密私钥并上传至Travis
 ```
+  生成加密过得新秘钥`id_rsa.enc`, 并自动将branch blog中git的信息及解密秘钥的相关信息添加到`.travis.yml`中。然后手动删除私钥文件`id_rsa`， 以保证代码仓库的安全。
 
-生成加密过得新秘钥`id_rsa.enc`, 并自动将branch blog中git的信息及解密秘钥的相关信息添加到`.travis.yml`中。然后手动删除私钥文件`id_rsa`， 以保证代码仓库的安全。
-
-##### SSH的设置
+- SSH的设置
 在当前目录下新建文件`ssh_config`，内容为
 ```bash
 Host github.com
@@ -116,41 +113,40 @@ Host github.com
   IdentityFile ~/.ssh/id_rsa
   IdentitiesOnly yes
 ```
-
-修改`.travis.yml`中的命令，指定openssl解密后的生成位置，xxxxxxxxxx部分就是你的解密参数，不要去改动它。
+  修改`.travis.yml`中的命令，指定openssl解密后的生成位置，xxxxxxxxxx部分就是你的解密参数，不要去改动它。
 ```bash
 - openssl aes-256-cbc -K $encrypted_xxxxxxxxxx_key -iv $encrypted_xxxxxxxxxx_iv
   -in travis.enc -out ~/.ssh/id_rsa -d
 ```
 
-##### 修改目录权限
+- 修改目录权限
 紧接着在`.travis.yml`中修改目录权限
 ```bash
 - chmod 600 ~/.ssh/id_rsa
 ```
 
-##### 将密钥加入系统
+- 将密钥加入系统
 紧接着在`.travis.yml`中将密钥加入系统
 ```bash
 - eval $(ssh-agent)
 - ssh-add ~/.ssh/id_rsa
 ```
 
-##### 修改git信息
+- 修改git信息
 ```bash
 - cp ssh_config ~/.ssh/config
 - git config --global user.name "username"
 - git config --global user.email username@example.com
 ```
 
-##### 添加分支信息
+- 添加分支信息
 ```bash
 branches:
   only:
   - blog
 ```
 
-##### 配置Hexo
+- 配置Hexo
 ```bash
 install:
 - npm install hexo-cli -g
@@ -162,9 +158,7 @@ script:
 - hexo d
 - hexo g
 ```
-
-这样就完成了`.travis.yml`的设置，这里是我的源文件[.travis.yml](https://github.com/Coryphaei/coryphaei.github.io/blob/blog/.travis.yml)。
-
+  这样就完成了`.travis.yml`的设置，这里是我的源文件[.travis.yml](https://github.com/Coryphaei/coryphaei.github.io/blob/blog/.travis.yml)。
 ```bash
 language: node_js
 node_js:
@@ -193,8 +187,7 @@ script:
 - hexo g
 - hexo d
 ```
-
-这个时候应该将其push到blog分支。
+  这个时候应该将其push到blog分支。
 > 注意，要删除themes/next/.git文件，否则会导致主题传不上去，渲染后首页空白的问题。
 
 #### View the pages
@@ -221,4 +214,4 @@ ls -a #确认删除
 解决办法就是`hexo g`命令做两遍，这个也是为什么我`.travis.yml`中的Hexo配置命令写了两遍的原因。被这个问题纠缠了很久，希望写出来能帮到大家，如果你没有问题就不需要在`.travis.yml`中写两遍命令。
 
 # 结语
-这个是我搭建这个博客写的第一篇文章，我也发现我这次解决问题回去弄个明白，回想之前写的博客，其实干货真的很少，知识也很肤浅，这次搭建博客-发现问题-解决问题给了我很好的体验，也让我学到了很多，我会尽可能的去写很多的干货去和大家分享！共勉！
+这个是我搭建这个博客写的第一篇文章，我也发现我这次解决问题会去弄个明白，回想之前写的博客，其实干货真的很少，知识也很肤浅，这次搭建博客--发现问题--解决问题给了我很好的体验，也让我学到了很多，我会尽可能的去写很多的干货去和大家分享！共勉！
