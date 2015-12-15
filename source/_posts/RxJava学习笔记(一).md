@@ -1,5 +1,5 @@
----
-title: RxJava学习笔记1
+﻿---
+title: RxJava学习笔记——基础使用方法
 date: 2015-12-15 12:27:20
 tags: [Android, RxJava]
 categories: 施博文
@@ -10,7 +10,7 @@ categories: 施博文
 很早以前就想去学一学RxJava这个既神秘又高大上的库，看过大头鬼的文章，限于自身水平原因一直看的迷迷糊糊晕头转向。刚找到扔物线写的文章，感觉突然茅塞顿开。 [扔物线文章地址](http://gank.io/post/560e15be2dca930e00da1083#toc_5)
 
 ## RxJava是什么
-一个实现异步操作的库（这句话只是先写在这，因为这句话具体含义还没理解）
+一个实现异步操作的库
 
 ## RxJava优点
 实现链式调用，逻辑清晰简单
@@ -147,6 +147,3 @@ observable.subscribe(onNextAction, onErrorAction);
 // 自动创建 Subscriber ，并使用 onNextAction、 onErrorAction 和 onCompletedAction 来定义 onNext()、 onError() 和 onCompleted()
 observable.subscribe(onNextAction, onErrorAction, onCompletedAction);
 ```
-
-## 小结
-以上为RxJava的基础用法，Rx不在具体的使用场景下很难理解，下一节研究具体场景下的使用方法。

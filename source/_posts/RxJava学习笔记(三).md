@@ -1,5 +1,5 @@
 ﻿---
-title: RxJava学习笔记3
+title: RxJava学习笔记——操作符与线程切换
 date: 2015-12-15 13:40:20
 tags: [Android, RxJava]
 categories: 施博文
@@ -119,8 +119,19 @@ Subscriber<String> subscriber = new Subscriber<String>() {
 ```
 注意到flatmap返回的是一个Observal对象，此时不发送这个observal对象，每个observal发送的对象都被汇入同一个Observal,并有这个Observal统一交给subscriber回调方法。
 
-#### compose()对Obseval的整体变化
-暂时还没看懂==
+## 线程控制 Schedulers
+### 基本概念
+多次切换线程：observeOn()指定的是它之后操作的线程，只要在每个想要切换线程的位置调用observeOn()即可
+```Java
+Observable.just(1,2,3,4)
+               .subscribeOn(Schedulers.io())
+               .observeOn(Schedulers.newThread())
+               .map(map1)//新线程，有observeOn指定
+               .observeOn(Schedulers.io())
+               .map(map2)  //io线程，由observeOn指定
+               .observeOn(AndroidSchedulers.mainThread())
+               .subscribeOn(subscriber);//主线程，由observeOn指定
+```
 
 ## 小结
 至此，对RxJava应该能有个大概的了解了，至少能够了解一些RxJava的基本内容了。然而，一切不讲实际需求的代码教学都是耍流氓，没有一个好的应用场景很难理解RxJava的好处，我看到像大头鬼这些大神也苦于寻找到一个优秀的使用场景，RxJava之路依然艰难。

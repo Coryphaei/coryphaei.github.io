@@ -1,5 +1,5 @@
 ﻿---
-title: RxJava学习笔记5
+title: RxJava学习笔记——使用场景
 date: 2015-12-15 13:42:20
 tags: [Android, RxJava]
 categories: 施博文
@@ -85,3 +85,10 @@ Observable.just("1","2","2","3","4","5")
 
 ## 视频地址
 [大头鬼的RxJava视频](http://boolan.com/lecture/1000001243#0-tsina-1-68759-397232819ff9a47a7b7e80a40613cfe1)
+
+## 补充之前的一点
+当调用Obeservable.subscibe(subscriber)时，会返回一个Subscription对象，这个对象代表了被观察者和订阅者的关系
+Subscription subscription = Obeservable.just("Hello")
+  .subscibe(s -> system.out.println(s));
+
+可以在Activity的onPause()中使用 subscription.unsubscribe();停止被观察者和订阅者的关系以防止内存泄露的问题。
