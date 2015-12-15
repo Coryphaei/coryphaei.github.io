@@ -1,7 +1,7 @@
 ﻿---
 title: RxJava学习笔记6
 date: 2015-12-15 13:43:20
-tags: [Android],[RxJava]
+tags: [Android, RxJava]
 categories: 施博文
 ---
 # RxJava笔记6

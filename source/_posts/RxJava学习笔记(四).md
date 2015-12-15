@@ -1,7 +1,7 @@
 ﻿---
 title: RxJava学习笔记4
 date: 2015-12-15 13:41:00
-tags: [Android],[RxJava]
+tags: [Android, RxJava]
 categories: 施博文
 ---
 # RxJava笔记4

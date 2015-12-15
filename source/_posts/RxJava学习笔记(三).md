@@ -1,7 +1,7 @@
 ﻿---
 title: RxJava学习笔记3
 date: 2015-12-15 13:40:20
-tags: [Android],[RxJava]
+tags: [Android, RxJava]
 categories: 施博文
 ---
 # RxJava笔记3
