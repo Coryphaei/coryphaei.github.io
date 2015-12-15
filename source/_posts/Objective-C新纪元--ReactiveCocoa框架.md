@@ -1,7 +1,7 @@
 ---
 title: Objective-C新纪元--ReactiveCocoa框架
 date: 2015-12-15 14:56:46
-tags: [iOS, ReactiveCocoa]
+tags: [iOS, ReactiveCocoa, Objective-C]
 categories: 叶帆
 ---
 # 前言
