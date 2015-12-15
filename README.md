@@ -3,6 +3,8 @@
 
 基于[Travis CI](https://travis-ci.org/)进行自动化构建。
 
+有关于Hexo+Travis CI的使用，可以参照[博客](http://blog.coryphaei.com/2015/12/11/%E4%BD%BF%E7%94%A8Travis%20CI%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BAHexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/#more)。
+
 # 步骤
 合作者按照如下步骤进行博客提交和编写。
 
