@@ -49,8 +49,8 @@ FRP提供了`信号（Signal）`机制来实现这样的效果，通过信号来
 
 ReactiveCocoa采用FRP思想，`信号`则是这个思想的精髓所在，灵魂所在。在ReactiveCocoa简称是RAC，所有的类都以`RAC`开头，所以说ReactiveCocoa中的信号就用`RACSignal`类来表示，用来展示`事件流`的变化，并且可以通过链接、过滤、组合等方式来进行处理。
 
-> 引用我在很多博客中看到的一段话：
-可以把信号想象成水龙头，只不过里面不是水，而是玻璃球(value)，直径跟水管的内径一样，这样就能保证玻璃球是依次排列，不会出现并排的情况(数据都是线性处理的，不会出现并发情况)。水龙头的开关默认是关的，除非有了接收方(subscriber)，才会打开。这样只要有新的玻璃球进来，就会自动传送给接收方。可以在水龙头上加一个过滤嘴(filter)，不符合的不让通过，也可以加一个改动装置，把球改变成符合自己的需求(map)。也可以把多个水龙头合并成一个新的水龙头(combineLatest:reduce:)，这样只要其中的一个水龙头有玻璃球出来，这个新合并的水龙头就会得到这个球。
+> 引用我在很多博客中看到的一段话，但是我对其做了改动，加入了桶的概念：
+可以把信号(signal)想象成水龙头，只不过里面不是水，而是玻璃球(stream of value)，直径跟水管的内径一样，这样就能保证玻璃球是依次排列，不会出现并排的情况(数据都是线性处理的，不会出现并发情况)。只要你打开水龙头的开关，就会有玻璃球出来。但是，并不是所有的玻璃球都能被使用，除非有了桶(subscriber)来接收掉下来的玻璃球，这样才能运往需要的地方。这样有新的玻璃球进来，有桶在监听，就会自动传送给接收者。可以在水龙头上加一个过滤嘴(filter)，不符合的不让通过，也可以加一个改动装置，把球改变成符合自己的需求(map)。也可以把多个水龙头合并成一个新的水龙头(combineLatest:reduce:)，这样只要其中的一个水龙头有玻璃球出来，这个新合并的水龙头就会得到这个球。
 
 ## 思考
 通过上述对其的了解，总结ReactiveCocoa带来的影响。
@@ -60,3 +60,23 @@ ReactiveCocoa采用FRP思想，`信号`则是这个思想的精髓所在，灵�
 PS：关于巧哥说的给Controller瘦身的问题，我认为这个是MVVM框架所带来的影响，ReactiveCocoa只是很好的配合了MVVM。因此我并没有把这一点归纳在内。
 
 # 开始
+进入正轨，开始介绍ReactiveCocoa的机制和常用方法。
+
+## 安装
+推荐大家用[CocoaPods](http://code4app.com/article/cocoapods-install-usage)进行安装，这么好的工具肯定要掌握的。
+![CocoaPods](http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/cocoapods.png)
+目前4.0的alpha版本正在开发，建议大家先使用发布的版本。如果你用swift来写可以用3.0，我是用的Objective，所以用的2.5版本，Podfile:
+```
+platform :ios, '8.0'
+pod 'ReactiveCocoa', '~> 2.5'
+
+```
+
+## RACStreams
+`RACStreams`官方定义`An abstract class representing any stream of values`，我翻译下RACStreams是展现任何数据流的一个抽象类。RACStreams通俗点讲就是上面那段话中`水管里面线性流动的、具有顺序的玻璃球`。RACStreams因为是一个抽象类，我们使用中很少直接接触到，我们一般是使用继承自RACStreams的`RACSignal`和`RACSequence`。对于RACSignal和RACSequence与RACStreams联系，我觉得可以直接用[NShipster](http://nshipster.cn/reactivecocoa/)中一句话：
+> signal是push驱动的stream，sequence是pull驱动的stream。
+
+## RACSignal and RACSubscriber
+`RACSignal`是ReactiveCocoa的核心所在，有了它就能开始使用ReactiveCocoa。RACSignal通俗点讲就是上面那段话中所提到的`水龙头`，表示未来要到到达的值。比较类似于一个概念，叫做`future and promise`，大家可以自行去了解下。
+`RACSubscriber`是订阅者，通俗点说就是上面那段话中用来装玻璃球的桶。我们可以用一个比喻来理解一下。把RACSignal比作插头，把RACSubscriber比作插座
+RACSignal一共会发送三种事件给接受方
