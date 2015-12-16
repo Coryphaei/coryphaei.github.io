@@ -78,5 +78,19 @@ pod 'ReactiveCocoa', '~> 2.5'
 
 ## RACSignal and RACSubscriber
 `RACSignal`是ReactiveCocoa的核心所在，有了它就能开始使用ReactiveCocoa。RACSignal通俗点讲就是上面那段话中所提到的`水龙头`，表示未来要到到达的值。比较类似于一个概念，叫做`future and promise`，大家可以自行去了解下。
-`RACSubscriber`是订阅者，通俗点说就是上面那段话中用来装玻璃球的桶。我们可以用一个比喻来理解一下。把RACSignal比作插头，把RACSubscriber比作插座
-RACSignal一共会发送三种事件给接受方
+`RACSubscriber`是订阅者，通俗点说就是上面那段话中用来装玻璃球的`桶`。我们可以用一个更好的比喻来理解一下。把RACSignal比作插头，把RACSubscriber比作插座，插头负责去用电，插座负责去取点，插头插座配套才能使用。
+
+### 冷信号(Cold)和热信号(Hot)
+在上文中提到的插头插座比喻中，如果说只有插头，没有插座，即只有RACSignal，而没有RACSubscriber，则把RACSignal称之为冷信号，而冷信号默认是不进行任何操作的。只要加上RACSubscriber，就可以进行操作，这个时候RACSignal就被称作是热信号。如果说只有插座，没有插头，那么只要去找到插头就能解决问题。
+
+### RACReplaySubject
+我们继续上文中的插头插座比喻，如果现在同时有多个插座在等待一个插头用电，那么我就要把这个插头多次拔下来插到所有的插座上。大家都不愿意重复这个操作，ReactiveCocoa提供了`RACReplaySubject`方法，保证`RACSignal`只触发一次。把需要send的value存起来，直接发送缓存数据。
+
+### 详解
+RACSignal一共会发送三种事件给RACSubscriber，RACSubscriber通过-subscribeNext:error:completed:对不同事件作出相应反应
+- next 继续进行发送
+- error 出现错误  
+- completed 完成
+一个RACSignal会因为error和completed的出现而终止，即生命周期中只会有一个errot或者completed，但是却可以多次发送next事件。而我们接下来要讨论的就是如何来处理这些多次next事件。
+
+## RACSequence
