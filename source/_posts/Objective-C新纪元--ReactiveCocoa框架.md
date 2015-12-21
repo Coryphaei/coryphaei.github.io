@@ -5,7 +5,7 @@ tags: [iOS, ReactiveCocoa, Objective-C]
 categories: 叶帆
 ---
 # 前言
-很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。。
+很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。另外提醒大家，我看到的优秀的讲ReactiveCocoa的文章篇幅都很长，其实大家都在简洁的语言来讲，我的这边文章应该写完也是长篇幅，希望大家可以耐心的看完。
 
 # 函数响应式编程
 ReactiveCocoa的基本思想就是`函数响应式编程（Function Reactive Programming，以下简称FRP）`。FRP是一种响应变化的编程范式。我们通常会拿一个经典的例子来解释概念。
@@ -80,6 +80,12 @@ pod 'ReactiveCocoa', '~> 2.5'
 `RACSignal`是ReactiveCocoa的核心所在，有了它就能开始使用ReactiveCocoa。RACSignal通俗点讲就是上面那段话中所提到的`水龙头`，表示未来要到到达的值。比较类似于一个概念，叫做`future and promise`，大家可以自行去了解下。
 `RACSubscriber`是订阅者，通俗点说就是上面那段话中用来装玻璃球的`桶`。我们可以用一个更好的比喻来理解一下。把RACSignal比作插头，把RACSubscriber比作插座，插头负责去用电，插座负责去取点，插头插座配套才能使用。
 
+```objc
+[self.usernameTextField.rac_textSignal subscribeNext:^(id x) {
+    NSLog(@"%@", x);
+}];
+```
+
 ### 冷信号(Cold)和热信号(Hot)
 在上文中提到的插头插座比喻中，如果说只有插头，没有插座，即只有RACSignal，而没有RACSubscriber，则把RACSignal称之为冷信号，而冷信号默认是不进行任何操作的。只要加上RACSubscriber，就可以进行操作，这个时候RACSignal就被称作是热信号。如果说只有插座，没有插头，那么只要去找到插头就能解决问题。
 
@@ -91,6 +97,114 @@ RACSignal一共会发送三种事件给RACSubscriber，RACSubscriber通过-subsc
 - next 继续进行发送
 - error 出现错误  
 - completed 完成
+
 一个RACSignal会因为error和completed的出现而终止，即生命周期中只会有一个errot或者completed，但是却可以多次发送next事件。而我们接下来要讨论的就是如何来处理这些多次next事件。
 
 ## RACSequence
+`RACSequence`官方的解释是一组immutable且有序的values，很多人说把这个看做是`NSArray`。但是注意用词是`看做`，因为这些values的值是`懒加载`(只有需要的时候才加载)，这样sequence只有一部分被用到，会一定程度得提升性能。那么NSArray可以通过rac_sequence方法转换成RACSequence来调用RAC中的方法了。像Cocoa的集合类型一样，RACSequence不接受`nil`。
+
+## map -- 修改
+`map` calls its block with each user that's fetched and returns a new. 解释一下就是将事件中获得的数据映射为你想要的对象，可以看做对玻璃球的重新包装。
+```objc
+[[[self.usernameTextField.rac_textSignal map:^id(NSString *text) {
+    return @(text.length);
+ }]
+ subscribeNext:^(id x) {
+     NSLog(@"%@", x);
+ }];
+```
+
+## filter -- 过滤
+`Filters` out values in the receiver that don't pass the given test. 非常简单对事件中的内容进行过滤，可以看做不合要求的玻璃球进行拦击，不允许通过水管。
+```objc
+[[[self.usernameTextField.rac_textSignal map:^id(NSString *text) {
+    return @(text.length);
+ }]
+ filter:^BOOL(NSNumber *length) {
+     return [length intValue] > 3;
+ }]
+ subscribeNext:^(id x) {
+     NSLog(@"%@", x);
+ }];
+```
+
+## combineLatest -- 组合
+`Combines` the latest values from the receiver and the given signal into RACTuples, once both have sent at least one next. 将一组事件组合为一个输出最新事件的signal。可以看做是对水管进行改造，使得任何时刻都输出最新的玻璃球。
+```objc
+RACSignal *signUpActiveSignal = [RACSignal combineLatest:@[validUsernameSignal, validPasswordSignal]
+                                                  reduce:^id(NSNumber *usernameValid, NSNumber *passwordValid){
+                                                      return @([usernameValid boolValue] && [passwordValid boolValue]);
+                                                  }];
+```
+
+## flatten -- 合并
+`flatten`把事件进行合并，对于其中的内容都进行显示，来一个显示一个，可以交叉显示。可以看做把多个水管进行了合并，哪个水管中的玻璃球到了就放出玻璃球。
+
+## flattenMap -- 解决signal of signals
+Maps `block` across the values in the receiver and flattens the result.
+这个问题首先要先解释一下。就是说事件完成block后有可能会返回signal的实例，这个时候外部信号中就会包含一个内部信号，这个时候使用map去讲信号转换为另一种信号，造成了嵌套的麻烦。所以说通过flattenMap将事件从内部信号发送到外部信号，并且映射到另外一个信号上去，这样这个过程就变得扁平化。Signal被按序的链接起来执行异步操作，而且不用嵌套block。
+```objc
+- (RACSignal *)signInSignal
+{
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.signInService signInWithUsername:self.usernameTextField.text
+                                      password:self.passwordTextField.text
+                                      complete:^(BOOL success) {
+                                          [subscriber sendNext:@(success)];
+                                          [subscriber sendCompleted];
+                                      }];
+        return nil;
+    }];
+}
+
+[[[self.signInButton rac_signalForControlEvents:UIControlEventTouchUpInside] flattenMap:^RACStream *(id value) {
+    return [self signInSignal];
+}] subscribeNext:^(id x) {
+    NSLog(@"Sign in result: %@", x);
+}];
+```
+
+## 循环引用
+ReactiveCocoa使用时大量的使用了block，而由于Ojective-C语言的内存管理机制使用的引用计数，会造成循环引用的问题。为了避免循环引用的问题，通常的解决办法是声明其中的一个变量为弱引用weak，将其赋值给self，在block中来使用这个弱引用的self，为了简单，通常使用了一个语法糖：`@weakify(self)`和`@strongify(self)`。
+
+## 常用宏定义
+- RAC()可以将信号的某个属性与其他的信号进行联动。
+```objc
+RAC(self.submitButton.enabled) = [RACSignal combineLatest:@[self.usernameField.rac_textSignal, self.passwordField.rac_textSignal] reduce:^id(NSString *userName, NSString *password) {
+    return @(userName.length >= 6 && password.length >= 6);
+}];
+```
+- RACObserve()监听信号的属性的改变，使用block的KVO
+```objc
+[RACObserve(self.textField, text) subscribeNext:^(NSString *newName) {
+    NSLog(@"%@", newName);
+}];
+```
+
+
+# MVVM
+![MVVM](http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/mvvm.png)
+
+## 为什么要提到MVVM
+MVVM其实是MVC的变形框架，主要来解决目前iOS应用中日益增长的重量级Controller的问题。在你使用ReactiveCocoa的时候会发现将事件定义统一接口后确实方便了代码的编写，但是都在Controller中来进行使得Conttroller异常的臃肿。这个也就是为什么很多人写到ReactiveCocoa的时候一定会提到MVVM的原因，建议大家配合使用，将ReactiveCocoa处理事件的代码写在ViewModel中，这样也方便做测试，昨天听了LeanCloud智维大神的自动化和测试之后，也准备来探究一下，应该到时候会出一篇博客。
+
+## 关于MVVM
+关于MVVM，这里不做详细的讲解，不是本章的重点。但是可以给出几篇参考，有兴趣的同学可以去了解一下。
+- [MVVM 介绍](http://objccn.io/issue-13-1/)
+- [被误解的MVC和被神化的MVVM
+](http://www.infoq.com/cn/articles/rethinking-mvc-mvvm)
+
+# 最后
+我尽管认真的学习了一周ReactiveCocoa，但是仍然还处在入门阶段，也许等我实战之后会有更多的体会和坑来告诉大家，但是这个是重框架，入门还是比较难的，我尽我所能的理解写下这个博客，希望能帮助大家入个门，同时我也给出几篇参考文章，希望对大家有帮助。
+- [Reactive​Cocoa](http://nshipster.cn/reactivecocoa/)
+- [说说ReactiveCocoa 2](http://limboy.me/ios/2013/12/27/reactivecocoa-2.html)
+- [ReactiveCocoa学习笔记](http://yulingtianxia.com/blog/2014/07/29/reactivecocoa/)
+- [ReactiveCocoa Tutorial – the Definitive Introduction: Part 1/2](http://southpeak.github.io/blog/2014/08/02/reactivecocoazhi-nan-%5B%3F%5D-:xin-hao/)
+- [使用ReactiveCocoa实现iOS平台响应式编程](http://www.itiger.me/?p=38)
+- [唐巧 ReactiveCocoa - iOS开发的新框架](http://blog.devtang.com/blog/2014/02/11/reactivecocoa-introduction/)
+
+# 视频
+<iframe height=498 width=510 src="http://player.youku.com/embed/XNzQ3OTAxNzYw" frameborder=0 allowfullscreen></iframe>
+
+# update
+- 2015.12.22 上周六的时候，[DeveloperLx](https://github.com/DeveloperLx)讲了有关于ReactiveCocoa的很多干货，我写了一篇[博客]()，大部分都是对他将的内容的整理和一点感悟。
