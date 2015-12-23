@@ -203,8 +203,5 @@ MVVM其实是MVC的变形框架，主要来解决目前iOS应用中日益增长�
 - [使用ReactiveCocoa实现iOS平台响应式编程](http://www.itiger.me/?p=38)
 - [唐巧 ReactiveCocoa - iOS开发的新框架](http://blog.devtang.com/blog/2014/02/11/reactivecocoa-introduction/)
 
-# 视频
-<iframe height=498 width=510 src="http://player.youku.com/embed/XMTQxOTIyOTQyMA==" frameborder=0 allowfullscreen></iframe>
-
 # update
 - 2015.12.22 上周六的时候，[DeveloperLx](https://github.com/DeveloperLx)讲了有关于ReactiveCocoa的很多干货，我写了一篇[博客]()，大部分都是对他将的内容的整理和一点感悟。
