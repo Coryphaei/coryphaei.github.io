@@ -1,6 +1,6 @@
 ﻿---
 title: Java8 lambda表达式
-date: 2015-10-23 13:46:00
+date: 2015-12-23 13:46:00
 tags: [Android,Java,Java8,Lambda]
 categories: Basti
 ---
