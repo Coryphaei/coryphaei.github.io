@@ -2,7 +2,7 @@
 title: RxJava学习笔记——操作符与线程切换
 date: 2015-12-15 13:40:20
 tags: [Android, RxJava]
-categories: 施博文
+categories: Basti
 ---
 # RxJava笔记3
 
