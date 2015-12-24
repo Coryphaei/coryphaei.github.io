@@ -2,7 +2,7 @@
 title: RxJava学习笔记——基础使用方法
 date: 2015-12-15 12:27:20
 tags: [Android, RxJava]
-categories: 施博文
+categories: Basti
 ---
 # RxJava笔记1
 
