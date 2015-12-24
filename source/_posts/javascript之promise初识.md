@@ -22,6 +22,7 @@ promise在es6中已经得到了完美支持，而nodejs中也有promise的三方
 
 现在我们使用promise来实现函数的顺序调用
 ```
+//假设以下函数中都包含异步调用逻辑
 function firstAsrc(resolve,reject){   //接受两个函数作为参数，处理正常事务和异常的事务
   //do something
    console.log("step 1");
@@ -36,9 +37,9 @@ function secondAsrc(resolve,reject){
   //do something
   console.log("step 2");
   if(a==1){
-     resolve(data);
+     resolve(data);          //交给下一个promise的resolve函数
   }else{
-    reject(data);
+    reject(data);           //交给下一个promise的reject函数
   }
 }
 
@@ -84,4 +85,6 @@ new Promise(firstAsrc).then(function(){
 ```
 现在我们来看看上面的代码,`Promise` 类是一个对象，这个对象有一个`then`方法，then方法有两个参数，这两个参数传入两个函数resolve和reject,所有的回调只执行者两个函数中的任意一个，其中resolve用于处理成功的回调，reject用户处理异常的回调。一般的形式为`promise.then(resolve,reject)`。
 
-我们注意到then函数执行完后返回的还是一个Promise对象`return new Promise(secondAsrc)`,Promise对象的构造函数接收一个带有异步逻辑的函数作为参数。既然then方法里面返回的依然是promise对象，那么是否意味着我们可以继续调用then方法呢？如上，确实如此。这样我们就可以将异步调用以链式的形式实现，
+我们注意到then函数执行完后返回的还是一个Promise对象`return new Promise(secondAsrc)`,Promise对象的构造函数接收一个带有异步逻辑的函数（这个函数在`new Promise(func)`时执行)作为参数。既然then方法里面返回的依然是promise对象，那么是否意味着我们可以继续调用then方法呢？如上，确实如此。这样我们就可以将异步调用以链式的形式实现.
+
+Promise的主要用法就是将各个异步操作封装成好多Promise，而一个Promise只处理一个异步逻辑。最后将各个Promise用链式调用写法串联，在这样处理下，如果异步逻辑之间前后关系很重的话，你也不需要层层嵌套，只需要把每个异步逻辑封装成Promise链式调用就可以了。
