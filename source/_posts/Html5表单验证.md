@@ -15,16 +15,18 @@ html5为我们提供了强大的校验功能，这无疑为我们手动写验证
 ### 解决问题
 如果我们监听了form的submit事件，但是又阻止其默认的提交行为，是不是就可以达到效果？
 在JQuery中有个event.preventDefault()方法，可以阻止元素发生默认的行为和事件。有了这个前提我们就可以实现了。
-```
+`````html
 <form>
    <!--code here-->
    <input type="submit"/>
 </form>
+`````
 
-$("form").submit(function(){
+`````javascript
+$("form").submit(function(event){
     event.preventDefault();
     $.ajax({
 
     });
 }
-```
+`````
