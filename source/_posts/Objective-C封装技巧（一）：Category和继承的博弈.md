@@ -8,9 +8,9 @@ categories: 叶帆
 有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。
 
 平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。
-- [Objective-C封装技巧（一）：Category和继承的博弈]()
-- [Objective-C封装技巧（二）：与“魔鬼的交易” -- Associated Objects]()
-- [Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling]()
+- [Objective-C封装技巧（一）：Category和继承的博弈](http://blog.coryphaei.com/2016/01/05/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9ACategory%E5%92%8C%E7%BB%A7%E6%89%BF%E7%9A%84%E5%8D%9A%E5%BC%88/)
+- [Objective-C封装技巧（二）：与“魔鬼的交易” -- Associated Objects](http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E4%B8%8E%E2%80%9C%E9%AD%94%E9%AC%BC%E7%9A%84%E4%BA%A4%E6%98%93%E2%80%9D%20--%20Associated%20Objects/)
+- [Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling](http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E6%AF%94%E7%BB%A7%E6%89%BF%E6%9B%B4%E5%8A%A0%E7%81%B5%E6%B4%BB%E7%9A%84overwrite%E6%96%B9%E6%B3%95%20--%20Method%20Swizzling/)
 
 # 提出问题
 希望大家在看系列文章之前，首先思考下面提出的几个问题：
@@ -47,7 +47,7 @@ categories: 叶帆
 开发者在项目的过程中，常常会出现积累了自己Category的情况。当使用三方库的时候，有可能出现Category重名的问题，所以建议大家在创建Category的时候，加上自己特有的prefix。可以在最初使用的时候统一命名为+xxTools，等到Category方法越来越多的时候在进行根据功能划分的Category拆分，当然同时也要加上prefix，避免重名。
 
 - 属性
-大家都会说Category中不能自定义属性。这种说法其实是不正确的，在Category中可以声明property，也同样会实现setter和getter方法，但是对于属性的实现是不行的。想要进行弥补，就只能使用Associated Objects来实现。我们将在该系列的下一篇[博客]()中来详细展开。
+大家都会说Category中不能自定义属性。这种说法其实是不正确的，在Category中可以声明property，也同样会实现setter和getter方法，但是对于属性的实现是不行的。想要进行弥补，就只能使用Associated Objects来实现。我们将在该系列的下一篇[博客](http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E4%B8%8E%E2%80%9C%E9%AD%94%E9%AC%BC%E7%9A%84%E4%BA%A4%E6%98%93%E2%80%9D%20--%20Associated%20Objects/)中来详细展开。
 
 ## 参考
 大家对于Category的封装，可以参考[Yaoyuan](https://github.com/ibireme)大神的[YYCategory](https://github.com/ibireme/YYCategories)，直接拿来就能用。对他为开源做出的贡献表示感谢。
