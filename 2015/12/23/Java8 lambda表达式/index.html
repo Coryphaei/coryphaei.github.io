@@ -1,0 +1,782 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Java,Java8,Lambda," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Coryphaei技术博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="Java8 lambda表达式前言RxJava的逻辑清晰的特点在Java8 lambda表达式下更加突出，学好RxJava必须熟悉lambda表达式。
+本质lambda表达式的本质是一个匿名方法
+举例问题：求两个int型数据的和，通常的写法是123public int add(int x,int y)&amp;#123;  return x+y;&amp;#125;
+转成lambda以后1(int x,int y">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8 lambda表达式">
+<meta property="og:url" content="http://blog.coryphaei.com/2015/12/23/Java8 lambda表达式/index.html">
+<meta property="og:site_name" content="Coryphaei技术博客">
+<meta property="og:description" content="Java8 lambda表达式前言RxJava的逻辑清晰的特点在Java8 lambda表达式下更加突出，学好RxJava必须熟悉lambda表达式。
+本质lambda表达式的本质是一个匿名方法
+举例问题：求两个int型数据的和，通常的写法是123public int add(int x,int y)&amp;#123;  return x+y;&amp;#125;
+转成lambda以后1(int x,int y">
+<meta property="og:updated_time" content="2016-01-04T13:47:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java8 lambda表达式">
+<meta name="twitter:description" content="Java8 lambda表达式前言RxJava的逻辑清晰的特点在Java8 lambda表达式下更加突出，学好RxJava必须熟悉lambda表达式。
+本质lambda表达式的本质是一个匿名方法
+举例问题：求两个int型数据的和，通常的写法是123public int add(int x,int y)&amp;#123;  return x+y;&amp;#125;
+转成lambda以后1(int x,int y">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide',
+    motion: true
+  };
+</script>
+
+  <title> Java8 lambda表达式 | Coryphaei技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?4c234300b38c9119f8b85e05d946803c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Coryphaei技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java8 lambda表达式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-23T13:46:00+08:00" content="2015-12-23">
+              2015-12-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Basti/" itemprop="url" rel="index">
+                    <span itemprop="name">Basti</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/23/Java8 lambda表达式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/23/Java8 lambda表达式/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="Java8_lambda_u8868_u8FBE_u5F0F"><a href="#Java8_lambda_u8868_u8FBE_u5F0F" class="headerlink" title="Java8 lambda表达式"></a>Java8 lambda表达式</h1><h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><p>RxJava的逻辑清晰的特点在Java8 lambda表达式下更加突出，学好RxJava必须熟悉lambda表达式。</p>
+<h2 id="u672C_u8D28"><a href="#u672C_u8D28" class="headerlink" title="本质"></a>本质</h2><p>lambda表达式的本质是一个匿名方法</p>
+<h3 id="u4E3E_u4F8B"><a href="#u4E3E_u4F8B" class="headerlink" title="举例"></a>举例</h3><p>问题：求两个int型数据的和，通常的写法是<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x+y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>转成lambda以后<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)-&gt;x+y;</span><br></pre></td></tr></table></figure></p>
+<p>或者，省略参数类型，java编译器会根据上下文推断<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x,y)-&gt;x+y;</span><br></pre></td></tr></table></figure></p>
+<p>或者,可以显示的指明返回值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x,y)-&gt;&#123;<span class="keyword">return</span> x+y;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>###小结<br>lambda表达式由三部分组成：参数列表，箭头，表达式/语句块、</p>
+<p>无参数的情况<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">()-&gt;&#123;Log.i(<span class="string">"TAG"</span>,<span class="string">"Message"</span>);&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果只有一个参数且可以被java推断出类型，那么，参数列表的括号也可以省略：<br>c-&gt;{return c.size;}</p>
+<h2 id="u7C7B_u578B"><a href="#u7C7B_u578B" class="headerlink" title="类型"></a>类型</h2><p>lambda表达式的目标类型是“函数接口”，定义是：一个接口，如果只有一个显示声明的抽象方法，那么它就是一个函数接口，最简单的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyInterface</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">int</span> <span class="title">getInt</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyInterface</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>特殊情况<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparator</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">int</span> <span class="title">compare</span><span class="params">(T o1,T o2)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注意接口Comparator，虽然声明了两个方法，貌似与定义不符（只有一个声明的抽象方法），但它的确是一个函数接口，这是因为equals方法是Object的。事实上所有的接口都会声明Object的public方法（大多是隐式的）。</p>
+<h2 id="u8D4B_u503C"><a href="#u8D4B_u503C" class="headerlink" title="赋值"></a>赋值</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyInterface myInterface = ()-&gt;&#123;Log.i(<span class="string">"Tag"</span>,<span class="string">"Message"</span>);&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再赋值给一个Object:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = myInterface;</span><br></pre></td></tr></table></figure></p>
+<p>但是不能这样赋值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = ()-&gt;&#123;Log.i(<span class="string">"Tag"</span>,<span class="string">"Message"</span>);&#125;</span><br></pre></td></tr></table></figure></p>
+<p>必须显示的转型成为一个函数接口才可以<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = (myInterface)()-&gt;&#123;Log.i(<span class="string">"Tag"</span>,<span class="string">"Message"</span>);&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="u4F7F_u7528"><a href="#u4F7F_u7528" class="headerlink" title="使用"></a>使用</h2><h3 id="lambda_u8868_u8FBE_u5F0F_u7528_u5728_u4F55_u5904"><a href="#lambda_u8868_u8FBE_u5F0F_u7528_u5728_u4F55_u5904" class="headerlink" title="lambda表达式用在何处"></a>lambda表达式用在何处</h3><p>举例：未使用Lambda<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Thread t = <span class="keyword">new</span> Thread( <span class="keyword">new</span> Runnable () &#123;</span><br><span class="line">  <span class="annotation">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      Log.i(<span class="string">"Tag"</span>,<span class="string">"Message"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>使用lambda<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thread t = <span class="keyword">new</span> Thread&#123;()-&gt;&#123;Log.i(<span class="string">"Tag"</span>,<span class="string">"Message"</span>);&#125;&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>注意第二个线程里的lambda表达式，并不需要将其转成Runnable,因为Java能够根据上下文自动推断，<br>一个Thread的构造函数接受一个Runnable参数，且传入的Lambda表达式正好符合其run()函数，所以java编译器可以推断为Runnable。</p>
+<h3 id="u96C6_u5408_u6279_u5904_u7406_u64CD_u4F5C"><a href="#u96C6_u5408_u6279_u5904_u7406_u64CD_u4F5C" class="headerlink" title="集合批处理操作"></a>集合批处理操作</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Object o:list ) &#123;</span><br><span class="line">  Log.i(<span class="string">"TAG"</span>,o);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可转换为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.forEach(o-&gt;&#123;Log.i(<span class="string">"TAG"</span>,o)&#125;;)</span><br></pre></td></tr></table></figure></p>
+<h3 id="u6D41"><a href="#u6D41" class="headerlink" title="流"></a>流</h3><p>一个流通常以一个集合类实例为其数据源，然后在其上定义各种操作。流的API设计使用了管道模式，对流的一次操作为返回另一个流，从而不同的操作可以串起来。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Shape&gt; shapes = ...;</span><br><span class="line">shape.stream()</span><br><span class="line">  .filter(s-&gt;s.getColor() == BLUE)</span><br><span class="line">  .forEach(s-&gt;s.setColor(RED));</span><br></pre></td></tr></table></figure></p>
+<p>首先调用stream()方法，以集合类对象shapes里面的元素为数据源，生成一个流，然后在这个流上调用filter方法，跳出蓝色的，返回一个流，最后调用forEach方法将这些蓝色的shape换成红色。<br>另一个例子：一个典型的数据处理方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">distinctPrimary</span><span class="params">(String... numbers)</span> </span>&#123;</span><br><span class="line">       List&lt;String&gt; list = Arrays.asList(numbers);</span><br><span class="line">       List&lt;Integer&gt; r = list.stream()</span><br><span class="line">               .map(e-&gt;&#123;<span class="keyword">new</span> Integer(e)&#125;)</span><br><span class="line">               .filter(e-&gt;Primes.isPrime(e))</span><br><span class="line">               .distinct()</span><br><span class="line">               .collect(Collectors.toList());</span><br><span class="line">       System.out.println(<span class="string">"distinctPrimary result is: "</span> + r);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>1.传入一串String，转成list。用steram()方法生成流<br>2.map方法将每个元素由String转为Integer得到一个新的流。<br>3.filter方法过滤不是素数的数字，并形成一个新的流<br>4.distinct 去重<br>5.collect 将最终结果收集到List中。<br>对于效率问题，前面的map filter distinct都是懒方法，collect是急方法，在遇到急方法之前，懒方法不会执行。<br>当遇到急方法时，前面的懒方法才会开始执行，且是管道式执行。例如对于字符串 “3”,首先将”3”转化为3，在判断他是否是素数，<br>如果是素数，保留3进入distinct方法，如果在队列中已经有3了，则把3丢弃，否则加入到队列中，实际上，”3”只进行了一次遍历操作，<br>而不是像代码中表达的，先把所有字符串转化为数字（第一次循环），再将数字过滤（第二次循环），去重（第三次循环），收集（第四次循环）。</p>
+<h3 id="u6536_u96C6_u5668"><a href="#u6536_u96C6_u5668" class="headerlink" title="收集器"></a>收集器</h3><p>上述代码中，collect就是一个收集器，即将所有经过懒方法后被保留下来的数据收集起来。<br>常见的收集器， groupingBy:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//给出一个String类型的数组，找出其中各个素数，并统计其出现次数</span></span><br><span class="line">List&lt;String&gt; l = Arrays.asList(String... numbers);</span><br><span class="line">Map&lt;Integer,Integer&gt; r</span><br><span class="line">        = l.stream()</span><br><span class="line">            .map(e-&gt;<span class="keyword">new</span> Integer(e))</span><br><span class="line">            .filter(e-&gt;Prime.isPrime(e))</span><br><span class="line">            .collect(Collectors.groupingBy(p-&gt;p,Collectors.summingInt(p-&gt;<span class="number">1</span>)));</span><br></pre></td></tr></table></figure></p>
+<p>相当于将所有收集到的数存放在一个Map中，以元素为Key，出现的次数作为Value。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//给出一个String类型的数组，求其中所有不重复素数的和</span></span><br><span class="line">List&lt;String&gt; l = Arrays.asList(numbers);</span><br><span class="line"><span class="keyword">int</span> sum = l.stream()</span><br><span class="line">            .map(e-&gt;<span class="keyword">new</span> Integer(e))</span><br><span class="line">            .filter(e-&gt;Prime.isPrime(e))</span><br><span class="line">            .distinct()</span><br><span class="line">            .reduce(<span class="number">0</span>,(x,y)-&gt;x+y);</span><br></pre></td></tr></table></figure>
+<p>reduce方法用来产生单一的一个最终结果<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 统计年龄在25-35岁的男女人数</span></span><br><span class="line"><span class="comment">//List&lt;Person&gt; persons</span></span><br><span class="line">Map&lt;Integer,Integer&gt; result = persons.parallelStream()</span><br><span class="line">                                      .filter(p-&gt;p.getAge&gt;=<span class="number">25</span>&amp;&amp;p.getAge()&lt;=<span class="number">35</span>)</span><br><span class="line">                                      .collect(Collectors.groupingBy(p-&gt;p.getSex(),Collectors.summingInt(p-&gt;<span class="number">1</span>));</span><br></pre></td></tr></table></figure></p>
+<h3 id="lambda_u8868_u8FBE_u5F0F_u7684_u66F4_u591A_u7528_u6CD5"><a href="#lambda_u8868_u8FBE_u5F0F_u7684_u66F4_u591A_u7528_u6CD5" class="headerlink" title="lambda表达式的更多用法"></a>lambda表达式的更多用法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//嵌套的lambda表达式</span></span><br><span class="line">Callable&lt;Runnable&gt; c1 = ()-&gt;()-&gt;&#123;System.out.println(<span class="string">"Nested lambda"</span>);&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//用在条件表达式中</span></span><br><span class="line">Callable c2 = <span class="keyword">true</span> ? (()-&gt;<span class="number">42</span>);(()-&gt;<span class="number">24</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个递归函数，注意须用this限定</span></span><br><span class="line"><span class="keyword">protected</span> UnaryOperator&lt;Integer&gt; factorial = i -&gt; i == <span class="number">0</span> ? <span class="number">1</span> : i * <span class="keyword">this</span>.factorial.apply( i - <span class="number">1</span> );</span><br></pre></td></tr></table></figure>
+<h3 id="u65B9_u6CD5_u5F15_u7528"><a href="#u65B9_u6CD5_u5F15_u7528" class="headerlink" title="方法引用"></a>方法引用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer::parseInt<span class="comment">//静态方法引用</span></span><br><span class="line">System.out::print<span class="comment">//实例方法引用</span></span><br><span class="line">Person::<span class="keyword">new</span><span class="comment">//构造器引用</span></span><br></pre></td></tr></table></figure>
+<p>举例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//c1 与 c2 是一样的（静态方法引用）</span></span><br><span class="line">Comparator&lt;Integer&gt; c2 = (x, y) -&gt; Integer.compare(x, y);</span><br><span class="line">Comparator&lt;Integer&gt; c1 = Integer::compare;</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面两句是一样的（实例方法引用1）</span></span><br><span class="line">persons.forEach(e -&gt; System.out.println(e));</span><br><span class="line">persons.forEach(System.out::println);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面两句是一样的（实例方法引用2）</span></span><br><span class="line">persons.forEach(person -&gt; person.eat());</span><br><span class="line">persons.forEach(Person::eat);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面两句是一样的（构造器引用）</span></span><br><span class="line">strList.stream().map(s -&gt; <span class="keyword">new</span> Integer(s));</span><br><span class="line">strList.stream().map(Integer::<span class="keyword">new</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="u751F_u6210_u5668_u51FD_u6570"><a href="#u751F_u6210_u5668_u51FD_u6570" class="headerlink" title="生成器函数"></a>生成器函数</h3><p>生成器函数会产生一系列元素，供给一个流。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream.generate(Supplier&lt;T&gt; s)</span><br></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Stream.generate(Math::random)</span><br><span class="line">      .limit(<span class="number">5</span>)</span><br><span class="line">      .forEach(System.out::println);</span><br></pre></td></tr></table></figure></p>
+<p>limit(5)，如果没有这个调用，那么这条语句会永远地执行下去。也就是说这个生成器是无穷的。这种调用叫做终结操作，或者短路操作。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+            <a href="/tags/Java8/" rel="tag">#Java8</a>
+          
+            <a href="/tags/Lambda/" rel="tag">#Lambda</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/16/javascript之promise初识/" rel="next" title="javascript之promise初识">
+                <i class="fa fa-chevron-left"></i> javascript之promise初识
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/24/Html5表单验证/" rel="prev" title="Html5表单验证在ajax提交时失效的处理">
+                Html5表单验证在ajax提交时失效的处理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/23/Java8 lambda表达式/"
+           data-title="Java8 lambda表达式" data-url="http://blog.coryphaei.com/2015/12/23/Java8 lambda表达式/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://7xp57v.com1.z0.glb.clouddn.com/coryphaeicoryphaei.gif" alt="coryphaei" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">coryphaei</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Coryphaei技术分享博客。</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Coryphaei" target="_blank">Corypahei</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java8_lambda_u8868_u8FBE_u5F0F"><span class="nav-number">1.</span> <span class="nav-text">Java8 lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u524D_u8A00"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u672C_u8D28"><span class="nav-number">1.2.</span> <span class="nav-text">本质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E3E_u4F8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u7C7B_u578B"><span class="nav-number">1.3.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u8D4B_u503C"><span class="nav-number">1.4.</span> <span class="nav-text">赋值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4F7F_u7528"><span class="nav-number">1.5.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lambda_u8868_u8FBE_u5F0F_u7528_u5728_u4F55_u5904"><span class="nav-number">1.5.1.</span> <span class="nav-text">lambda表达式用在何处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u96C6_u5408_u6279_u5904_u7406_u64CD_u4F5C"><span class="nav-number">1.5.2.</span> <span class="nav-text">集合批处理操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6D41"><span class="nav-number">1.5.3.</span> <span class="nav-text">流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6536_u96C6_u5668"><span class="nav-number">1.5.4.</span> <span class="nav-text">收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lambda_u8868_u8FBE_u5F0F_u7684_u66F4_u591A_u7528_u6CD5"><span class="nav-number">1.5.5.</span> <span class="nav-text">lambda表达式的更多用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u65B9_u6CD5_u5F15_u7528"><span class="nav-number">1.5.6.</span> <span class="nav-text">方法引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u751F_u6210_u5668_u51FD_u6570"><span class="nav-number">1.5.7.</span> <span class="nav-text">生成器函数</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coryphaei</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"coryphaei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/MathJax.js"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
+  
+
+
+  
+  
+
+</body>
+</html>

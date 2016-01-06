@@ -1,0 +1,817 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Objective-C,ReactiveCocoa,iOS," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Coryphaei技术博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="前言很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。另外提醒大家，我看到的优秀的讲ReactiveCo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Objective-C新纪元--ReactiveCocoa框架">
+<meta property="og:url" content="http://blog.coryphaei.com/2015/12/15/Objective-C新纪元--ReactiveCocoa框架/index.html">
+<meta property="og:site_name" content="Coryphaei技术博客">
+<meta property="og:description" content="前言很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。另外提醒大家，我看到的优秀的讲ReactiveCo">
+<meta property="og:image" content="http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/FRP_signal.png">
+<meta property="og:image" content="http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/cocoapods.png">
+<meta property="og:image" content="http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/mvvm.png">
+<meta property="og:updated_time" content="2016-01-04T13:47:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Objective-C新纪元--ReactiveCocoa框架">
+<meta name="twitter:description" content="前言很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。另外提醒大家，我看到的优秀的讲ReactiveCo">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide',
+    motion: true
+  };
+</script>
+
+  <title> Objective-C新纪元--ReactiveCocoa框架 | Coryphaei技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?4c234300b38c9119f8b85e05d946803c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Coryphaei技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Objective-C新纪元--ReactiveCocoa框架
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-15T14:56:46+08:00" content="2015-12-15">
+              2015-12-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/叶帆/" itemprop="url" rel="index">
+                    <span itemprop="name">叶帆</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/15/Objective-C新纪元--ReactiveCocoa框架/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/15/Objective-C新纪元--ReactiveCocoa框架/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h1><p>很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。另外提醒大家，我看到的优秀的讲ReactiveCocoa的文章篇幅都很长，其实大家都在简洁的语言来讲，我的这边文章应该写完也是长篇幅，希望大家可以耐心的看完。</p>
+<h1 id="u51FD_u6570_u54CD_u5E94_u5F0F_u7F16_u7A0B"><a href="#u51FD_u6570_u54CD_u5E94_u5F0F_u7F16_u7A0B" class="headerlink" title="函数响应式编程"></a>函数响应式编程</h1><p>ReactiveCocoa的基本思想就是<code>函数响应式编程（Function Reactive Programming，以下简称FRP）</code>。FRP是一种响应变化的编程范式。我们通常会拿一个经典的例子来解释概念。</p>
+<h2 id="u7406_u5FF5"><a href="#u7406_u5FF5" class="headerlink" title="理念"></a>理念</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">2</span></span><br><span class="line">b = <span class="number">2</span></span><br><span class="line">c = a + b<span class="comment">// c = 4</span></span><br><span class="line"></span><br><span class="line">b = <span class="number">4</span></span><br><span class="line"><span class="comment">// 现在c的值是多少？</span></span><br></pre></td></tr></table></figure>
+<p>上面的问题，正常人一眼就能看出答案，因为我们<code>响应</code>了<code>b = 2</code>这个值的变化，所以说<code>c</code>的值会随着<code>b</code>的值的改变而改变。FRP就是使用这样的基本原理，所以称之为<code>响应式编程</code>。</p>
+<h2 id="u5982_u4F55_u5B9E_u73B0"><a href="#u5982_u4F55_u5B9E_u73B0" class="headerlink" title="如何实现"></a>如何实现</h2><p>FRP提供了<code>信号（Signal）</code>机制来实现这样的效果，通过信号来记录值的变化。通过信号的组合，从而不再去监听值的变化，甚至是事件的变化。在上述例子中加入了signal的图解：<br><img src="http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/FRP_signal.png" alt="FRP_signal"></p>
+<h2 id="ReactiveCocoa_u4F5C_u8005_u5BF9_u4E8EFRP_u7684_u89E3_u91CA"><a href="#ReactiveCocoa_u4F5C_u8005_u5BF9_u4E8EFRP_u7684_u89E3_u91CA" class="headerlink" title="ReactiveCocoa作者对于FRP的解释"></a>ReactiveCocoa作者对于FRP的解释</h2><p><a href="http://blog.maybeapps.com/post/42894317939/input-and-output" target="_blank" rel="external">Josh Abernathy这样解释它：</a></p>
+<blockquote>
+<p>程序接收输入产生输出。输出就是对输入做了一些事的结果。输入，转换，输出，完成。<br>输入是应用动作的全部来源。点击、键盘事件、定时器事件、GPS时间、网络请求响应都算是输入。这些事件被传递到应用中，应用将他们以某种方式混合，产生了结果：就是输出。<br>输出通常会改变应用的UI。开关状态变化、列表有了新的元素都是UI变化。也有可能让磁盘上某个文件产生变化，或者产生一个API请求，这都是应用的输出。<br>但不像传统的输入输出设计，应用的输入输出可以产生很多次。应用打开后，不只是一个简单的 输入→工作→输出 就构成了一个生命周期。应用经常有大量的输入并基于这些输入产生输出。</p>
+</blockquote>
+<h2 id="u8BDD_u5916"><a href="#u8BDD_u5916" class="headerlink" title="话外"></a>话外</h2><p>关于ReactiveCocoa的灵感来源，我们可以看到官方README中提到了<code>ReactiveCocoa深受Microsoft&#39;s Reactive Extension的思想，并基于Reactive Extension（Rx）</code>。但是官方列举了很多ReactiveCocoa有别于Rx的地方，有兴趣的可以去了解下。</p>
+<h1 id="ReactiveCocoa"><a href="#ReactiveCocoa" class="headerlink" title="ReactiveCocoa"></a>ReactiveCocoa</h1><p><a href="http://reactivecocoa.io/" target="_blank" rel="external">ReactiveCocoa</a> is a framework developed by <a href="https://github.com/ReactiveCocoa/ReactiveCocoa" target="_blank" rel="external">GitHub</a> to support functional reactive programming on iOS and OS X.</p>
+<h2 id="u8D77_u56E0"><a href="#u8D77_u56E0" class="headerlink" title="起因"></a>起因</h2><p>作为一个移动开发者，应用中经常有大量的输入，大部分的代码都用来响应这些输出并且基于这些输入来产生输出。我们需要响应的事件非常多：按钮点击事件（target-action）、网络消息回调事件（Block or delegate）、属性变化事件（KVO）、通知事件（NSNotification）等，而这边响应事件在代码中的表现形式却并不统一。为了定义一个标准统一的事件处理接口，并且通过定义的接口来进行组合使用，ReactiveCocoa出现了。</p>
+<h2 id="u57FA_u672C_u601D_u60F3"><a href="#u57FA_u672C_u601D_u60F3" class="headerlink" title="基本思想"></a>基本思想</h2><p>我们GitHub主页上看到，官方这样给出了概念：</p>
+<blockquote>
+<p>ReactiveCocoa (RAC)是采用FRP的一个Cocoa framework。RAC提供了API用来组合、转换一直变化的数据流。</p>
+</blockquote>
+<p>ReactiveCocoa采用FRP思想，<code>信号</code>则是这个思想的精髓所在，灵魂所在。在ReactiveCocoa简称是RAC，所有的类都以<code>RAC</code>开头，所以说ReactiveCocoa中的信号就用<code>RACSignal</code>类来表示，用来展示<code>事件流</code>的变化，并且可以通过链接、过滤、组合等方式来进行处理。</p>
+<blockquote>
+<p>引用我在很多博客中看到的一段话，但是我对其做了改动，加入了桶的概念：<br>可以把信号(signal)想象成水龙头，只不过里面不是水，而是玻璃球(stream of value)，直径跟水管的内径一样，这样就能保证玻璃球是依次排列，不会出现并排的情况(数据都是线性处理的，不会出现并发情况)。只要你打开水龙头的开关，就会有玻璃球出来。但是，并不是所有的玻璃球都能被使用，除非有了桶(subscriber)来接收掉下来的玻璃球，这样才能运往需要的地方。这样有新的玻璃球进来，有桶在监听，就会自动传送给接收者。可以在水龙头上加一个过滤嘴(filter)，不符合的不让通过，也可以加一个改动装置，把球改变成符合自己的需求(map)。也可以把多个水龙头合并成一个新的水龙头(combineLatest:reduce:)，这样只要其中的一个水龙头有玻璃球出来，这个新合并的水龙头就会得到这个球。</p>
+</blockquote>
+<h2 id="u601D_u8003"><a href="#u601D_u8003" class="headerlink" title="思考"></a>思考</h2><p>通过上述对其的了解，总结ReactiveCocoa带来的影响。</p>
+<ul>
+<li>定义标准的事件处理接口</li>
+<li>解决了状态过多依赖的问题</li>
+</ul>
+<p>PS：关于巧哥说的给Controller瘦身的问题，我认为这个是MVVM框架所带来的影响，ReactiveCocoa只是很好的配合了MVVM。因此我并没有把这一点归纳在内。</p>
+<h1 id="u5F00_u59CB"><a href="#u5F00_u59CB" class="headerlink" title="开始"></a>开始</h1><p>进入正轨，开始介绍ReactiveCocoa的机制和常用方法。</p>
+<h2 id="u5B89_u88C5"><a href="#u5B89_u88C5" class="headerlink" title="安装"></a>安装</h2><p>推荐大家用<a href="http://code4app.com/article/cocoapods-install-usage" target="_blank" rel="external">CocoaPods</a>进行安装，这么好的工具肯定要掌握的。<br><img src="http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/cocoapods.png" alt="CocoaPods"><br>目前4.0的alpha版本正在开发，建议大家先使用发布的版本。如果你用swift来写可以用3.0，我是用的Objective，所以用的2.5版本，Podfile:<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">platform <span class="symbol">:ios</span>, <span class="string">'8.0'</span></span><br><span class="line">pod <span class="string">'ReactiveCocoa'</span>, <span class="string">'~&gt; 2.5'</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="RACStreams"><a href="#RACStreams" class="headerlink" title="RACStreams"></a>RACStreams</h2><p><code>RACStreams</code>官方定义<code>An abstract class representing any stream of values</code>，我翻译下RACStreams是展现任何数据流的一个抽象类。RACStreams通俗点讲就是上面那段话中<code>水管里面线性流动的、具有顺序的玻璃球</code>。RACStreams因为是一个抽象类，我们使用中很少直接接触到，我们一般是使用继承自RACStreams的<code>RACSignal</code>和<code>RACSequence</code>。对于RACSignal和RACSequence与RACStreams联系，我觉得可以直接用<a href="http://nshipster.cn/reactivecocoa/" target="_blank" rel="external">NShipster</a>中一句话：</p>
+<blockquote>
+<p>signal是push驱动的stream，sequence是pull驱动的stream。</p>
+</blockquote>
+<h2 id="RACSignal_and_RACSubscriber"><a href="#RACSignal_and_RACSubscriber" class="headerlink" title="RACSignal and RACSubscriber"></a>RACSignal and RACSubscriber</h2><p><code>RACSignal</code>是ReactiveCocoa的核心所在，有了它就能开始使用ReactiveCocoa。RACSignal通俗点讲就是上面那段话中所提到的<code>水龙头</code>，表示未来要到到达的值。比较类似于一个概念，叫做<code>future and promise</code>，大家可以自行去了解下。<br><code>RACSubscriber</code>是订阅者，通俗点说就是上面那段话中用来装玻璃球的<code>桶</code>。我们可以用一个更好的比喻来理解一下。把RACSignal比作插头，把RACSubscriber比作插座，插头负责去用电，插座负责去取点，插头插座配套才能使用。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">self</span><span class="variable">.usernameTextField</span><span class="variable">.rac_textSignal</span> subscribeNext:^(<span class="keyword">id</span> x) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, x);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<h3 id="u51B7_u4FE1_u53F7_28Cold_29_u548C_u70ED_u4FE1_u53F7_28Hot_29"><a href="#u51B7_u4FE1_u53F7_28Cold_29_u548C_u70ED_u4FE1_u53F7_28Hot_29" class="headerlink" title="冷信号(Cold)和热信号(Hot)"></a>冷信号(Cold)和热信号(Hot)</h3><p>在上文中提到的插头插座比喻中，如果说只有插头，没有插座，即只有RACSignal，而没有RACSubscriber，则把RACSignal称之为冷信号，而冷信号默认是不进行任何操作的。只要加上RACSubscriber，就可以进行操作，这个时候RACSignal就被称作是热信号。如果说只有插座，没有插头，那么只要去找到插头就能解决问题。</p>
+<h3 id="RACReplaySubject"><a href="#RACReplaySubject" class="headerlink" title="RACReplaySubject"></a>RACReplaySubject</h3><p>我们继续上文中的插头插座比喻，如果现在同时有多个插座在等待一个插头用电，那么我就要把这个插头多次拔下来插到所有的插座上。大家都不愿意重复这个操作，ReactiveCocoa提供了<code>RACReplaySubject</code>方法，保证<code>RACSignal</code>只触发一次。把需要send的value存起来，直接发送缓存数据。</p>
+<h3 id="u8BE6_u89E3"><a href="#u8BE6_u89E3" class="headerlink" title="详解"></a>详解</h3><p>RACSignal一共会发送三种事件给RACSubscriber，RACSubscriber通过-subscribeNext:error:completed:对不同事件作出相应反应</p>
+<ul>
+<li>next 继续进行发送</li>
+<li>error 出现错误  </li>
+<li>completed 完成</li>
+</ul>
+<p>一个RACSignal会因为error和completed的出现而终止，即生命周期中只会有一个errot或者completed，但是却可以多次发送next事件。而我们接下来要讨论的就是如何来处理这些多次next事件。</p>
+<h2 id="RACSequence"><a href="#RACSequence" class="headerlink" title="RACSequence"></a>RACSequence</h2><p><code>RACSequence</code>官方的解释是一组immutable且有序的values，很多人说把这个看做是<code>NSArray</code>。但是注意用词是<code>看做</code>，因为这些values的值是<code>懒加载</code>(只有需要的时候才加载)，这样sequence只有一部分被用到，会一定程度得提升性能。那么NSArray可以通过rac_sequence方法转换成RACSequence来调用RAC中的方法了。像Cocoa的集合类型一样，RACSequence不接受<code>nil</code>。</p>
+<h2 id="map__u2013__u4FEE_u6539"><a href="#map__u2013__u4FEE_u6539" class="headerlink" title="map – 修改"></a>map – 修改</h2><p><code>map</code> calls its block with each user that’s fetched and returns a new. 解释一下就是将事件中获得的数据映射为你想要的对象，可以看做对玻璃球的重新包装。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[[<span class="keyword">self</span><span class="variable">.usernameTextField</span><span class="variable">.rac_textSignal</span> map:^<span class="keyword">id</span>(<span class="built_in">NSString</span> *text) &#123;</span><br><span class="line">    <span class="keyword">return</span> @(text<span class="variable">.length</span>);</span><br><span class="line"> &#125;]</span><br><span class="line"> subscribeNext:^(<span class="keyword">id</span> x) &#123;</span><br><span class="line">     <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, x);</span><br><span class="line"> &#125;];</span><br></pre></td></tr></table></figure></p>
+<h2 id="filter__u2013__u8FC7_u6EE4"><a href="#filter__u2013__u8FC7_u6EE4" class="headerlink" title="filter – 过滤"></a>filter – 过滤</h2><p><code>Filters</code> out values in the receiver that don’t pass the given test. 非常简单对事件中的内容进行过滤，可以看做不合要求的玻璃球进行拦击，不允许通过水管。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[[[<span class="keyword">self</span><span class="variable">.usernameTextField</span><span class="variable">.rac_textSignal</span> map:^<span class="keyword">id</span>(<span class="built_in">NSString</span> *text) &#123;</span><br><span class="line">    <span class="keyword">return</span> @(text<span class="variable">.length</span>);</span><br><span class="line"> &#125;]</span><br><span class="line"> filter:^<span class="built_in">BOOL</span>(<span class="built_in">NSNumber</span> *length) &#123;</span><br><span class="line">     <span class="keyword">return</span> [length intValue] &gt; <span class="number">3</span>;</span><br><span class="line"> &#125;]</span><br><span class="line"> subscribeNext:^(<span class="keyword">id</span> x) &#123;</span><br><span class="line">     <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, x);</span><br><span class="line"> &#125;];</span><br></pre></td></tr></table></figure></p>
+<h2 id="combineLatest__u2013__u7EC4_u5408"><a href="#combineLatest__u2013__u7EC4_u5408" class="headerlink" title="combineLatest – 组合"></a>combineLatest – 组合</h2><p><code>Combines</code> the latest values from the receiver and the given signal into RACTuples, once both have sent at least one next. 将一组事件组合为一个输出最新事件的signal。可以看做是对水管进行改造，使得任何时刻都输出最新的玻璃球。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RACSignal *signUpActiveSignal = [RACSignal combineLatest:@[validUsernameSignal, validPasswordSignal]</span><br><span class="line">                                                  reduce:^<span class="keyword">id</span>(<span class="built_in">NSNumber</span> *usernameValid, <span class="built_in">NSNumber</span> *passwordValid)&#123;</span><br><span class="line">                                                      <span class="keyword">return</span> @([usernameValid boolValue] &amp;&amp; [passwordValid boolValue]);</span><br><span class="line">                                                  &#125;];</span><br></pre></td></tr></table></figure></p>
+<h2 id="flatten__u2013__u5408_u5E76"><a href="#flatten__u2013__u5408_u5E76" class="headerlink" title="flatten – 合并"></a>flatten – 合并</h2><p><code>flatten</code>把事件进行合并，对于其中的内容都进行显示，来一个显示一个，可以交叉显示。可以看做把多个水管进行了合并，哪个水管中的玻璃球到了就放出玻璃球。</p>
+<h2 id="flattenMap__u2013__u89E3_u51B3signal_of_signals"><a href="#flattenMap__u2013__u89E3_u51B3signal_of_signals" class="headerlink" title="flattenMap – 解决signal of signals"></a>flattenMap – 解决signal of signals</h2><p>Maps <code>block</code> across the values in the receiver and flattens the result.<br>这个问题首先要先解释一下。就是说事件完成block后有可能会返回signal的实例，这个时候外部信号中就会包含一个内部信号，这个时候使用map去讲信号转换为另一种信号，造成了嵌套的麻烦。所以说通过flattenMap将事件从内部信号发送到外部信号，并且映射到另外一个信号上去，这样这个过程就变得扁平化。Signal被按序的链接起来执行异步操作，而且不用嵌套block。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- (RACSignal *)signInSignal</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> [RACSignal createSignal:^RACDisposable *(<span class="keyword">id</span>&lt;RACSubscriber&gt; subscriber) &#123;</span><br><span class="line">        [<span class="keyword">self</span><span class="variable">.signInService</span> signInWithUsername:<span class="keyword">self</span><span class="variable">.usernameTextField</span><span class="variable">.text</span></span><br><span class="line">                                      password:<span class="keyword">self</span><span class="variable">.passwordTextField</span><span class="variable">.text</span></span><br><span class="line">                                      complete:^(<span class="built_in">BOOL</span> success) &#123;</span><br><span class="line">                                          [subscriber sendNext:@(success)];</span><br><span class="line">                                          [subscriber sendCompleted];</span><br><span class="line">                                      &#125;];</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[[[<span class="keyword">self</span><span class="variable">.signInButton</span> rac_signalForControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>] flattenMap:^RACStream *(<span class="keyword">id</span> value) &#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> signInSignal];</span><br><span class="line">&#125;] subscribeNext:^(<span class="keyword">id</span> x) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Sign in result: %@"</span>, x);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure></p>
+<h2 id="u5FAA_u73AF_u5F15_u7528"><a href="#u5FAA_u73AF_u5F15_u7528" class="headerlink" title="循环引用"></a>循环引用</h2><p>ReactiveCocoa使用时大量的使用了block，而由于Ojective-C语言的内存管理机制使用的引用计数，会造成循环引用的问题。为了避免循环引用的问题，通常的解决办法是声明其中的一个变量为弱引用weak，将其赋值给self，在block中来使用这个弱引用的self，为了简单，通常使用了一个语法糖：<code>@weakify(self)</code>和<code>@strongify(self)</code>。</p>
+<h2 id="u5E38_u7528_u5B8F_u5B9A_u4E49"><a href="#u5E38_u7528_u5B8F_u5B9A_u4E49" class="headerlink" title="常用宏定义"></a>常用宏定义</h2><ul>
+<li><p>RAC()可以将信号的某个属性与其他的信号进行联动。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RAC(<span class="keyword">self</span><span class="variable">.submitButton</span><span class="variable">.enabled</span>) = [RACSignal combineLatest:@[<span class="keyword">self</span><span class="variable">.usernameField</span><span class="variable">.rac_textSignal</span>, <span class="keyword">self</span><span class="variable">.passwordField</span><span class="variable">.rac_textSignal</span>] reduce:^<span class="keyword">id</span>(<span class="built_in">NSString</span> *userName, <span class="built_in">NSString</span> *password) &#123;</span><br><span class="line">    <span class="keyword">return</span> @(userName<span class="variable">.length</span> &gt;= <span class="number">6</span> &amp;&amp; password<span class="variable">.length</span> &gt;= <span class="number">6</span>);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RACObserve()监听信号的属性的改变，使用block的KVO</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[RACObserve(<span class="keyword">self</span><span class="variable">.textField</span>, text) subscribeNext:^(<span class="built_in">NSString</span> *newName) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, newName);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h1><p><img src="http://7xp57v.com1.z0.glb.clouddn.com/coryphaei/mvvm.png" alt="MVVM"></p>
+<h2 id="u4E3A_u4EC0_u4E48_u8981_u63D0_u5230MVVM"><a href="#u4E3A_u4EC0_u4E48_u8981_u63D0_u5230MVVM" class="headerlink" title="为什么要提到MVVM"></a>为什么要提到MVVM</h2><p>MVVM其实是MVC的变形框架，主要来解决目前iOS应用中日益增长的重量级Controller的问题。在你使用ReactiveCocoa的时候会发现将事件定义统一接口后确实方便了代码的编写，但是都在Controller中来进行使得Conttroller异常的臃肿。这个也就是为什么很多人写到ReactiveCocoa的时候一定会提到MVVM的原因，建议大家配合使用，将ReactiveCocoa处理事件的代码写在ViewModel中，这样也方便做测试，昨天听了LeanCloud智维大神的自动化和测试之后，也准备来探究一下，应该到时候会出一篇博客。</p>
+<h2 id="u5173_u4E8EMVVM"><a href="#u5173_u4E8EMVVM" class="headerlink" title="关于MVVM"></a>关于MVVM</h2><p>关于MVVM，这里不做详细的讲解，不是本章的重点。但是可以给出几篇参考，有兴趣的同学可以去了解一下。</p>
+<ul>
+<li><a href="http://objccn.io/issue-13-1/" target="_blank" rel="external">MVVM 介绍</a></li>
+<li><a href="http://www.infoq.com/cn/articles/rethinking-mvc-mvvm" target="_blank" rel="external">被误解的MVC和被神化的MVVM
+</a></li>
+</ul>
+<h1 id="u6700_u540E"><a href="#u6700_u540E" class="headerlink" title="最后"></a>最后</h1><p>我尽管认真的学习了一周ReactiveCocoa，但是仍然还处在入门阶段，也许等我实战之后会有更多的体会和坑来告诉大家，但是这个是重框架，入门还是比较难的，我尽我所能的理解写下这个博客，希望能帮助大家入个门，同时我也给出几篇参考文章，希望对大家有帮助。</p>
+<ul>
+<li><a href="http://nshipster.cn/reactivecocoa/" target="_blank" rel="external">Reactive​Cocoa</a></li>
+<li><a href="http://limboy.me/ios/2013/12/27/reactivecocoa-2.html" target="_blank" rel="external">说说ReactiveCocoa 2</a></li>
+<li><a href="http://yulingtianxia.com/blog/2014/07/29/reactivecocoa/" target="_blank" rel="external">ReactiveCocoa学习笔记</a></li>
+<li><a href="http://southpeak.github.io/blog/2014/08/02/reactivecocoazhi-nan-%5B%3F%5D-:xin-hao/" target="_blank" rel="external">ReactiveCocoa Tutorial – the Definitive Introduction: Part 1/2</a></li>
+<li><a href="http://www.itiger.me/?p=38" target="_blank" rel="external">使用ReactiveCocoa实现iOS平台响应式编程</a></li>
+<li><a href="http://blog.devtang.com/blog/2014/02/11/reactivecocoa-introduction/" target="_blank" rel="external">唐巧 ReactiveCocoa - iOS开发的新框架</a></li>
+</ul>
+<h1 id="u89C6_u9891"><a href="#u89C6_u9891" class="headerlink" title="视频"></a>视频</h1><iframe height="498" width="510" src="http://player.youku.com/embed/XMTQxOTIyOTQyMA==" frameborder="0" allowfullscreen></iframe>
+
+<h1 id="update"><a href="#update" class="headerlink" title="update"></a>update</h1><ul>
+<li>2015.12.22 上周六的时候，<a href="https://github.com/DeveloperLx" target="_blank" rel="external">DeveloperLx</a>讲了有关于ReactiveCocoa的很多干货，我写了一篇<a href="">博客</a>，大部分都是对他将的内容的整理和一点感悟。</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Objective-C/" rel="tag">#Objective-C</a>
+          
+            <a href="/tags/ReactiveCocoa/" rel="tag">#ReactiveCocoa</a>
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/15/RxJava学习笔记(五)/" rel="next" title="RxJava学习笔记——使用场景">
+                <i class="fa fa-chevron-left"></i> RxJava学习笔记——使用场景
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/16/javascript之promise初识/" rel="prev" title="javascript之promise初识">
+                javascript之promise初识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/15/Objective-C新纪元--ReactiveCocoa框架/"
+           data-title="Objective-C新纪元--ReactiveCocoa框架" data-url="http://blog.coryphaei.com/2015/12/15/Objective-C新纪元--ReactiveCocoa框架/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://7xp57v.com1.z0.glb.clouddn.com/coryphaeicoryphaei.gif" alt="coryphaei" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">coryphaei</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Coryphaei技术分享博客。</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Coryphaei" target="_blank">Corypahei</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#u524D_u8A00"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u51FD_u6570_u54CD_u5E94_u5F0F_u7F16_u7A0B"><span class="nav-number">2.</span> <span class="nav-text">函数响应式编程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u7406_u5FF5"><span class="nav-number">2.1.</span> <span class="nav-text">理念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5982_u4F55_u5B9E_u73B0"><span class="nav-number">2.2.</span> <span class="nav-text">如何实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReactiveCocoa_u4F5C_u8005_u5BF9_u4E8EFRP_u7684_u89E3_u91CA"><span class="nav-number">2.3.</span> <span class="nav-text">ReactiveCocoa作者对于FRP的解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u8BDD_u5916"><span class="nav-number">2.4.</span> <span class="nav-text">话外</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ReactiveCocoa"><span class="nav-number">3.</span> <span class="nav-text">ReactiveCocoa</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u8D77_u56E0"><span class="nav-number">3.1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u57FA_u672C_u601D_u60F3"><span class="nav-number">3.2.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u601D_u8003"><span class="nav-number">3.3.</span> <span class="nav-text">思考</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5F00_u59CB"><span class="nav-number">4.</span> <span class="nav-text">开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u5B89_u88C5"><span class="nav-number">4.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RACStreams"><span class="nav-number">4.2.</span> <span class="nav-text">RACStreams</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RACSignal_and_RACSubscriber"><span class="nav-number">4.3.</span> <span class="nav-text">RACSignal and RACSubscriber</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u51B7_u4FE1_u53F7_28Cold_29_u548C_u70ED_u4FE1_u53F7_28Hot_29"><span class="nav-number">4.3.1.</span> <span class="nav-text">冷信号(Cold)和热信号(Hot)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RACReplaySubject"><span class="nav-number">4.3.2.</span> <span class="nav-text">RACReplaySubject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BE6_u89E3"><span class="nav-number">4.3.3.</span> <span class="nav-text">详解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RACSequence"><span class="nav-number">4.4.</span> <span class="nav-text">RACSequence</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map__u2013__u4FEE_u6539"><span class="nav-number">4.5.</span> <span class="nav-text">map – 修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filter__u2013__u8FC7_u6EE4"><span class="nav-number">4.6.</span> <span class="nav-text">filter – 过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#combineLatest__u2013__u7EC4_u5408"><span class="nav-number">4.7.</span> <span class="nav-text">combineLatest – 组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flatten__u2013__u5408_u5E76"><span class="nav-number">4.8.</span> <span class="nav-text">flatten – 合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flattenMap__u2013__u89E3_u51B3signal_of_signals"><span class="nav-number">4.9.</span> <span class="nav-text">flattenMap – 解决signal of signals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5FAA_u73AF_u5F15_u7528"><span class="nav-number">4.10.</span> <span class="nav-text">循环引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5E38_u7528_u5B8F_u5B9A_u4E49"><span class="nav-number">4.11.</span> <span class="nav-text">常用宏定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVVM"><span class="nav-number">5.</span> <span class="nav-text">MVVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E3A_u4EC0_u4E48_u8981_u63D0_u5230MVVM"><span class="nav-number">5.1.</span> <span class="nav-text">为什么要提到MVVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5173_u4E8EMVVM"><span class="nav-number">5.2.</span> <span class="nav-text">关于MVVM</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u6700_u540E"><span class="nav-number">6.</span> <span class="nav-text">最后</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u89C6_u9891"><span class="nav-number">7.</span> <span class="nav-text">视频</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#update"><span class="nav-number">8.</span> <span class="nav-text">update</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coryphaei</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"coryphaei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/MathJax.js"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
+  
+
+
+  
+  
+
+</body>
+</html>
