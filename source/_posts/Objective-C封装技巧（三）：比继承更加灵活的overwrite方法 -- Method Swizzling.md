@@ -21,3 +21,7 @@ categories: 叶帆
 
 
 http://blog.leichunfeng.com/blog/2015/06/14/objective-c-method-swizzling-best-practice/
+http://blog.csdn.net/yiyaaixuexi/article/details/9374411
+http://nshipster.com/method-swizzling/
+http://southpeak.github.io/blog/2014/11/06/objective-c-runtime-yun-xing-shi-zhi-si-:method-swizzling/
+http://tech.glowing.com/cn/method-swizzling-aop/
