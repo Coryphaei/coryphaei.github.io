@@ -62,7 +62,7 @@
 <meta property="og:description" content="写在前面有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。
 平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。">
 <meta property="og:image" content="http://7xkvt5.com1.z0.glb.clouddn.com/package%2FAssociatedObjects.png">
-<meta property="og:updated_time" content="2016-01-06T15:42:18.000Z">
+<meta property="og:updated_time" content="2016-01-06T15:57:52.974Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Objective-C封装技巧（二）：与“魔鬼的交易” -- Associated Objects">
 <meta name="twitter:description" content="写在前面有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。
@@ -237,7 +237,7 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-01-06T09:42:32+08:00" content="2016-01-06">
+            <time itemprop="dateCreated" datetime="2016-01-06T01:42:32+00:00" content="2016-01-06">
               2016-01-06
             </time>
           </span>
@@ -286,9 +286,9 @@
         <span itemprop="articleBody"><h1 id="u5199_u5728_u524D_u9762"><a href="#u5199_u5728_u524D_u9762" class="headerlink" title="写在前面"></a>写在前面</h1><p>有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。</p>
 <p>平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。</p>
 <ul>
-<li><a href="">Objective-C封装技巧（一）：Category和继承的博弈</a></li>
-<li><a href="">Objective-C封装技巧（二）：与“魔鬼的交易” – Associated Objects</a></li>
-<li><a href="">Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 – Method Swizzling</a></li>
+<li><a href="http://blog.coryphaei.com/2016/01/05/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9ACategory%E5%92%8C%E7%BB%A7%E6%89%BF%E7%9A%84%E5%8D%9A%E5%BC%88/">Objective-C封装技巧（一）：Category和继承的博弈</a></li>
+<li><a href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E4%B8%8E%E2%80%9C%E9%AD%94%E9%AC%BC%E7%9A%84%E4%BA%A4%E6%98%93%E2%80%9D%20--%20Associated%20Objects/">Objective-C封装技巧（二）：与“魔鬼的交易” – Associated Objects</a></li>
+<li><a href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E6%AF%94%E7%BB%A7%E6%89%BF%E6%9B%B4%E5%8A%A0%E7%81%B5%E6%B4%BB%E7%9A%84overwrite%E6%96%B9%E6%B3%95%20--%20Method%20Swizzling/">Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 – Method Swizzling</a></li>
 </ul>
 <h1 id="u63D0_u51FA_u95EE_u9898"><a href="#u63D0_u51FA_u95EE_u9898" class="headerlink" title="提出问题"></a>提出问题</h1><p>希望大家在看系列文章之前，首先思考下面提出的几个问题：</p>
 <ol>
@@ -475,7 +475,7 @@
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
