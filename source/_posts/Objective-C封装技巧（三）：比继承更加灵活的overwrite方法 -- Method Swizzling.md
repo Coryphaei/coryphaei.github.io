@@ -89,11 +89,11 @@ categories: 叶帆
 我们发现我们使用了Method Swizzling之后，对现有的方法进行了新方法的注入，我们在调用现有方法的时候，就会自动触发我们注入的方法。这种做法非常类似于Hook。
 
 - 步骤
-  1. 创建需要交换的方法 **- (void)umeng_viewWillAppear:(BOOL)animated** ，在方法中添加需要实现的方法。这里有个问题解释下，为什么umeng_viewWillAppear又调用了自身？首先我们通过Method Swizzling之后，这两个方法的实现是被交换的，也就是说在定义的时候这样写，但是在实际调用的时候这个方法调用的viewWillAppear，而在viewWillAppear中调用的是umeng_viewWillAppear。
+1. 创建需要交换的方法 **- (void)umeng_viewWillAppear:(BOOL)animated** ，在方法中添加需要实现的方法。这里有个问题解释下，为什么umeng_viewWillAppear又调用了自身？首先我们通过Method Swizzling之后，这两个方法的实现是被交换的，也就是说在定义的时候这样写，但是在实际调用的时候这个方法调用的viewWillAppear，而在viewWillAppear中调用的是umeng_viewWillAppear。
 
-  2. 进行方法的交换 **- (void)swizzleMethod(Class class, SEL originalSelector, SEL swizzledSelector)** ，这一步是具体的实现过程。将两个方法进行交换。我们发现其中有一个判断条件，是否是增加方法。通常使用Method Swizzling是来进行方法的增加，而不是单纯的替换，所以说会进行判断。
+2. 进行方法的交换 **- (void)swizzleMethod(Class class, SEL originalSelector, SEL swizzledSelector)** ，这一步是具体的实现过程。将两个方法进行交换。我们发现其中有一个判断条件，是否是增加方法。通常使用Method Swizzling是来进行方法的增加，而不是单纯的替换，所以说会进行判断。
 
-  3. 触发时间，是通过 **+ (void)load** 方法来触发。关于这个方法的调用时间是在类被加载的时候调用的，此外load方法还有一个非常重要的特性，那就是子类、父类和分类中的load方法的实现是被区别对待的。换句话说在 Objective-C runtime 自动调用load方法时，分类中的load方法并不会对主类中的load方法造成覆盖。
+3. 触发时间，是通过 **+ (void)load** 方法来触发。关于这个方法的调用时间是在类被加载的时候调用的，此外load方法还有一个非常重要的特性，那就是子类、父类和分类中的load方法的实现是被区别对待的。换句话说在 Objective-C runtime 自动调用load方法时，分类中的load方法并不会对主类中的load方法造成覆盖。
 
 # 总结
 至此，有关于这个系列的所有文章都已经结束，希望大家能够从文章有所收获，在自己的项目里面用到这些，多思考多重构。
