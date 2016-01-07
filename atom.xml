@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.coryphaei.com/"/>
-  <updated>2016-01-07T10:42:35.106Z</updated>
+  <updated>2016-01-07T10:46:28.004Z</updated>
   <id>http://blog.coryphaei.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E6%AF%94%E7%BB%A7%E6%89%BF%E6%9B%B4%E5%8A%A0%E7%81%B5%E6%B4%BB%E7%9A%84overwrite%E6%96%B9%E6%B3%95%20--%20Method%20Swizzling/"/>
     <id>http://blog.coryphaei.com/2016/01/06/Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling/</id>
     <published>2016-01-06T02:38:24.000Z</published>
-    <updated>2016-01-07T10:42:35.106Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="u5199_u5728_u524D_u9762"><a href="#u5199_u5728_u524D_u9762" class="headerlink" title="写在前面"></a>写在前面</h1><p>有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。</p>
 <p>平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。</p>
 <ul>
@@ -53,6 +53,8 @@
 <li><p>不需要显性调用<br>我们发现我们使用了Method Swizzling之后，对现有的方法进行了新方法的注入，我们在调用现有方法的时候，就会自动触发我们注入的方法。这种做法非常类似于Hook。</p>
 </li>
 <li><p>步骤</p>
+</li>
+</ul>
 <ol>
 <li><p>创建需要交换的方法 <strong>- (void)umeng_viewWillAppear:(BOOL)animated</strong> ，在方法中添加需要实现的方法。这里有个问题解释下，为什么umeng_viewWillAppear又调用了自身？首先我们通过Method Swizzling之后，这两个方法的实现是被交换的，也就是说在定义的时候这样写，但是在实际调用的时候这个方法调用的viewWillAppear，而在viewWillAppear中调用的是umeng_viewWillAppear。</p>
 </li>
@@ -61,8 +63,6 @@
 <li><p>触发时间，是通过 <strong>+ (void)load</strong> 方法来触发。关于这个方法的调用时间是在类被加载的时候调用的，此外load方法还有一个非常重要的特性，那就是子类、父类和分类中的load方法的实现是被区别对待的。换句话说在 Objective-C runtime 自动调用load方法时，分类中的load方法并不会对主类中的load方法造成覆盖。</p>
 </li>
 </ol>
-</li>
-</ul>
 <h1 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h1><p>至此，有关于这个系列的所有文章都已经结束，希望大家能够从文章有所收获，在自己的项目里面用到这些，多思考多重构。</p>
 ]]></content>
     <summary type="html">
@@ -86,7 +86,7 @@
     <link href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E4%B8%8E%E2%80%9C%E9%AD%94%E9%AC%BC%E7%9A%84%E4%BA%A4%E6%98%93%E2%80%9D%20--%20Associated%20Objects/"/>
     <id>http://blog.coryphaei.com/2016/01/06/Objective-C封装技巧（二）：与“魔鬼的交易” -- Associated Objects/</id>
     <published>2016-01-06T01:42:32.000Z</published>
-    <updated>2016-01-07T10:42:35.106Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="u5199_u5728_u524D_u9762"><a href="#u5199_u5728_u524D_u9762" class="headerlink" title="写在前面"></a>写在前面</h1><p>有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。</p>
 <p>平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。</p>
 <ul>
@@ -192,7 +192,7 @@
     <link href="http://blog.coryphaei.com/2016/01/05/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9ACategory%E5%92%8C%E7%BB%A7%E6%89%BF%E7%9A%84%E5%8D%9A%E5%BC%88/"/>
     <id>http://blog.coryphaei.com/2016/01/05/Objective-C封装技巧（一）：Category和继承的博弈/</id>
     <published>2016-01-05T07:24:19.000Z</published>
-    <updated>2016-01-07T10:42:35.106Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="u5199_u5728_u524D_u9762"><a href="#u5199_u5728_u524D_u9762" class="headerlink" title="写在前面"></a>写在前面</h1><p>有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。</p>
 <p>平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。</p>
 <ul>
@@ -254,7 +254,7 @@
     <link href="http://blog.coryphaei.com/2015/12/30/%E6%B5%85%E8%B0%88iOS%E4%B8%ADLibrary%E5%92%8CFramework/"/>
     <id>http://blog.coryphaei.com/2015/12/30/浅谈iOS中Library和Framework/</id>
     <published>2015-12-30T02:40:25.000Z</published>
-    <updated>2016-01-07T10:42:35.110Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="u5199_u5728_u524D_u9762"><a href="#u5199_u5728_u524D_u9762" class="headerlink" title="写在前面"></a>写在前面</h1><p>有关于库的出现场景，其实很简单的回答就是，不愿意把实现的源码暴露给其他人。虽然我是脑残的开源爱好者，但是总有些场景下，有这样的需求，比如外包公司的框架，比如我这次写NativeScript，需要自己将三方库打包然后使用在js中调用（当然后来我看到支持CocoaPods的时候，喷了一口老血）。不过这个是客观的一些原因，还有一些有想法的程序员，为了减少编译的时间，也会选择将改动不大的代码进行打包。打包好的代码是编译完成的二进制文件，在项目进行编译的时候链接上，确实一定程度的减少编译时间。</p>
 <h1 id="u5E93_u7684_u672C_u8D28"><a href="#u5E93_u7684_u672C_u8D28" class="headerlink" title="库的本质"></a>库的本质</h1><p>库的本质，我觉得非常好理解。我们首先要知道对于所有的库，都是进行编译的，而编译生成的其实是一段二进制代码。所以我们可以给库下个定义：</p>
 <blockquote>
@@ -309,7 +309,7 @@
     <link href="http://blog.coryphaei.com/2015/12/24/Html5%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/"/>
     <id>http://blog.coryphaei.com/2015/12/24/Html5表单验证/</id>
     <published>2015-12-24T08:24:24.000Z</published>
-    <updated>2016-01-07T10:42:35.106Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h3 id="u95EE_u9898_u63CF_u8FF0"><a href="#u95EE_u9898_u63CF_u8FF0" class="headerlink" title="问题描述"></a>问题描述</h3><p>html5为我们提供了强大的校验功能，这无疑为我们手动写验证或者使用JQueryValide要方便的多，这里我们并不去缀述html5的自动校验功能，我们来说一下在ajax提交form表单的情况下验证失效的问题。众所周知，form表单的提交是带跳转的，如果不想刷新或者跳转页面的话，我们必须使用ajax来提交表单数据，这样的话又会带来一个问题，就是form表单的校验就会失效，这样的话html5强大的验证功能我们就失去了，怎么来解决这个办法呢？</p>
 <h3 id="u95EE_u9898_u5206_u6790"><a href="#u95EE_u9898_u5206_u6790" class="headerlink" title="问题分析"></a>问题分析</h3><p>我们知道，html5中form表单验证的触发是在表单提交的时候，在html中提交表单只需有个type=submit的button，在点击该button之后，便会触发表单验证以及向远端提交数据。一般情况下，我们在使用ajax提交表单的时候，坚听了一个type=button的button的点击事件，然后向远端传递一个序列化的表单数据，从始至终我们都没有看到form的submit()事件的触发，这是为什么我们表单验证失效的原因。</p>
 <p>这样，我们就有了解决问题的思路，我们能不能触发submit事件，同时又阻止form表单提交数据并跳转呢。答案是可以的。</p>
@@ -333,7 +333,7 @@
     <link href="http://blog.coryphaei.com/2015/12/23/Java8%20lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
     <id>http://blog.coryphaei.com/2015/12/23/Java8 lambda表达式/</id>
     <published>2015-12-23T05:46:00.000Z</published>
-    <updated>2016-01-07T10:42:35.106Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="Java8_lambda_u8868_u8FBE_u5F0F"><a href="#Java8_lambda_u8868_u8FBE_u5F0F" class="headerlink" title="Java8 lambda表达式"></a>Java8 lambda表达式</h1><h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><p>RxJava的逻辑清晰的特点在Java8 lambda表达式下更加突出，学好RxJava必须熟悉lambda表达式。</p>
 <h2 id="u672C_u8D28"><a href="#u672C_u8D28" class="headerlink" title="本质"></a>本质</h2><p>lambda表达式的本质是一个匿名方法</p>
 <h3 id="u4E3E_u4F8B"><a href="#u4E3E_u4F8B" class="headerlink" title="举例"></a>举例</h3><p>问题：求两个int型数据的和，通常的写法是<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x+y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -393,7 +393,7 @@
     <link href="http://blog.coryphaei.com/2015/12/16/javascript%E4%B9%8Bpromise%E5%88%9D%E8%AF%86/"/>
     <id>http://blog.coryphaei.com/2015/12/16/javascript之promise初识/</id>
     <published>2015-12-16T09:30:34.000Z</published>
-    <updated>2016-01-07T10:42:35.110Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h3 id="promise_u662F_u4EC0_u4E48_uFF1F"><a href="#promise_u662F_u4EC0_u4E48_uFF1F" class="headerlink" title="promise是什么？"></a>promise是什么？</h3><p>在javascript promise机制出现之前，基于javascript的异步回调机制，当我们要顺序执行一段代码时，需要在异步回调里面执行代码，有时候需要在回调里面添加回调函数，如此一来，以前写代码之前代码是这样的：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">firstAsrc(<span class="function"><span class="keyword">function</span><span class="params">(item)</span></span>&#123;          <span class="comment">//第一个异步回调函数</span></span><br><span class="line">    <span class="comment">//coding do something</span></span><br><span class="line">    secondASrc(<span class="function"><span class="keyword">function</span><span class="params">(item)</span></span>&#123;    <span class="comment">//第二个回掉函数</span></span><br><span class="line">        <span class="comment">//coding do something</span></span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure></p>
 <p>这还是只有两个回调函数，如果有十几个呢，我相信你就会疯了，至少我会。<br>所以，promise是用来解决javascript中层层异步调用，实现链式调用模式的一种机制。</p>
 <h3 id="promise_u7684_u7528_u6CD5"><a href="#promise_u7684_u7528_u6CD5" class="headerlink" title="promise的用法"></a>promise的用法</h3><p>promise在es6中已经得到了完美支持，而nodejs中也有promise的三方类库支持。现在我们来看看promise到底要怎么使用。</p>
@@ -420,7 +420,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/Objective-C%E6%96%B0%E7%BA%AA%E5%85%83--ReactiveCocoa%E6%A1%86%E6%9E%B6/"/>
     <id>http://blog.coryphaei.com/2015/12/15/Objective-C新纪元--ReactiveCocoa框架/</id>
     <published>2015-12-15T06:56:46.000Z</published>
-    <updated>2016-01-07T10:42:35.110Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h1><p>很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。另外提醒大家，我看到的优秀的讲ReactiveCocoa的文章篇幅都很长，其实大家都在简洁的语言来讲，我的这边文章应该写完也是长篇幅，希望大家可以耐心的看完。</p>
 <h1 id="u51FD_u6570_u54CD_u5E94_u5F0F_u7F16_u7A0B"><a href="#u51FD_u6570_u54CD_u5E94_u5F0F_u7F16_u7A0B" class="headerlink" title="函数响应式编程"></a>函数响应式编程</h1><p>ReactiveCocoa的基本思想就是<code>函数响应式编程（Function Reactive Programming，以下简称FRP）</code>。FRP是一种响应变化的编程范式。我们通常会拿一个经典的例子来解释概念。</p>
 <h2 id="u7406_u5FF5"><a href="#u7406_u5FF5" class="headerlink" title="理念"></a>理念</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">2</span></span><br><span class="line">b = <span class="number">2</span></span><br><span class="line">c = a + b<span class="comment">// c = 4</span></span><br><span class="line"></span><br><span class="line">b = <span class="number">4</span></span><br><span class="line"><span class="comment">// 现在c的值是多少？</span></span><br></pre></td></tr></table></figure>
@@ -521,7 +521,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/RxJava%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%94)/"/>
     <id>http://blog.coryphaei.com/2015/12/15/RxJava学习笔记(五)/</id>
     <published>2015-12-15T05:42:20.000Z</published>
-    <updated>2016-01-07T10:42:35.110Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="RxJava_u7B14_u8BB05"><a href="#RxJava_u7B14_u8BB05" class="headerlink" title="RxJava笔记5"></a>RxJava笔记5</h1><h2 id="u573A_u666F_u4E3E_u4F8B"><a href="#u573A_u666F_u4E3E_u4F8B" class="headerlink" title="场景举例"></a>场景举例</h2><h3 id="u573A_u666F1"><a href="#u573A_u666F1" class="headerlink" title="场景1"></a>场景1</h3><h4 id="u9700_u6C42_uFF1A"><a href="#u9700_u6C42_uFF1A" class="headerlink" title="需求："></a>需求：</h4><p>1.有一字符串，每个字符都是一个数字</p>
 <p>2.将字符串转化为数字</p>
 <p>3.过滤掉小于1的元素</p>
@@ -556,7 +556,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/RxJava%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%89)/"/>
     <id>http://blog.coryphaei.com/2015/12/15/RxJava学习笔记(三)/</id>
     <published>2015-12-15T05:40:20.000Z</published>
-    <updated>2016-01-07T10:42:35.110Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="RxJava_u7B14_u8BB03"><a href="#RxJava_u7B14_u8BB03" class="headerlink" title="RxJava笔记3"></a>RxJava笔记3</h1><h2 id="u53D8_u6362"><a href="#u53D8_u6362" class="headerlink" title="变换"></a>变换</h2><h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><p>变换，就是将时间序列中的对象或这个序列进行加工处理，转换成不同的事件或者事件序列。</p>
 <h3 id="u5B9E_u4F8B_u4EE3_u7801"><a href="#u5B9E_u4F8B_u4EE3_u7801" class="headerlink" title="实例代码"></a>实例代码</h3><h4 id="map_28_29"><a href="#map_28_29" class="headerlink" title="map()"></a>map()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Observable.just(<span class="string">"image/logo.png"</span>)</span><br><span class="line">      .map(<span class="keyword">new</span> Func1&lt;String, Bitmap&gt;() &#123;</span><br><span class="line">          <span class="annotation">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> Bitmap <span class="title">call</span><span class="params">(String filepate)</span> </span>&#123;</span><br><span class="line">              <span class="keyword">return</span> getBitmapFromFile(filepate);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">      .subscribe(<span class="keyword">new</span> Action1&lt;Bitmap&gt;() &#123;</span><br><span class="line">          <span class="annotation">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Bitmap bitmap)</span> </span>&#123;</span><br><span class="line">              showBitmap(bitmap);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure>
 <p>可以看到 Fun1和Action1非常接近，区别在于Fun1包装了一个有返回值的方法，Action1包装了一个无返回值的方法.<br>这样就可以把原本的参数类型转化为Bitmap。</p>
@@ -584,7 +584,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/RxJava%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)/"/>
     <id>http://blog.coryphaei.com/2015/12/15/RxJava学习笔记(一)/</id>
     <published>2015-12-15T04:27:20.000Z</published>
-    <updated>2016-01-07T10:42:35.110Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="RxJava_u7B14_u8BB01"><a href="#RxJava_u7B14_u8BB01" class="headerlink" title="RxJava笔记1"></a>RxJava笔记1</h1><h2 id="u5199_u5728_u524D_u9762"><a href="#u5199_u5728_u524D_u9762" class="headerlink" title="写在前面"></a>写在前面</h2><p>很早以前就想去学一学RxJava这个既神秘又高大上的库，看过大头鬼的文章，限于自身水平原因一直看的迷迷糊糊晕头转向。刚找到扔物线写的文章，感觉突然茅塞顿开。 <a href="http://gank.io/post/560e15be2dca930e00da1083#toc_5" target="_blank" rel="external">扔物线文章地址</a></p>
 <h2 id="RxJava_u662F_u4EC0_u4E48"><a href="#RxJava_u662F_u4EC0_u4E48" class="headerlink" title="RxJava是什么"></a>RxJava是什么</h2><p>一个实现异步操作的库</p>
 <h2 id="RxJava_u4F18_u70B9"><a href="#RxJava_u4F18_u70B9" class="headerlink" title="RxJava优点"></a>RxJava优点</h2><p>实现链式调用，逻辑清晰简单</p>
@@ -621,7 +621,7 @@
     <link href="http://blog.coryphaei.com/2015/12/11/%E4%BD%BF%E7%94%A8Travis%20CI%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BAHexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/"/>
     <id>http://blog.coryphaei.com/2015/12/11/使用Travis CI自动构建Hexo静态博客/</id>
     <published>2015-12-11T13:34:52.000Z</published>
-    <updated>2016-01-07T10:42:35.110Z</updated>
+    <updated>2016-01-07T10:46:28.004Z</updated>
     <content type="html"><![CDATA[<h1 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h1><p>随着现在open source越来越火，更多的人开始注重技术知识的获取。不可否认，目前的信息传播速度非常之快，渠道也非常之多，对于知识获取的整理和理解是很多人都在做的一件事情。在这种情况下更多的人开始选择写博客，把自己认知记录下来，一是为了检验自己对于技术的理解，二是为了让更多的人去从你的博客中获取到有用的信息。</p>
 <p>我2014年的时候自己买了域名，用<code>jekyll + GitHub Pages</code>搭建了自己的博客，有兴趣的可以访问我的<a href="http://yeziahehe.com" target="_blank" rel="external">博客</a>。（目前正在考虑换到Hexo，而Coryphaei技术博客就是采用的Hexo）</p>
 <h1 id="u6280_u672F"><a href="#u6280_u672F" class="headerlink" title="技术"></a>技术</h1><p>Coryphaei技术博客采用的是<code>Hexo + GitHub Pages + Travis CI</code>的技术方案，实现了多人同时更新博客并且自动化构建。</p>

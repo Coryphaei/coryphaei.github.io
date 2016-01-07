@@ -62,7 +62,7 @@
 <meta property="og:description" content="写在前面有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。
 平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。">
 <meta property="og:image" content="http://7xkvt5.com1.z0.glb.clouddn.com/package%2FUMeng.png">
-<meta property="og:updated_time" content="2016-01-07T10:42:35.106Z">
+<meta property="og:updated_time" content="2016-01-07T10:46:28.004Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling">
 <meta name="twitter:description" content="写在前面有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。
@@ -316,6 +316,8 @@
 <li><p>不需要显性调用<br>我们发现我们使用了Method Swizzling之后，对现有的方法进行了新方法的注入，我们在调用现有方法的时候，就会自动触发我们注入的方法。这种做法非常类似于Hook。</p>
 </li>
 <li><p>步骤</p>
+</li>
+</ul>
 <ol>
 <li><p>创建需要交换的方法 <strong>- (void)umeng_viewWillAppear:(BOOL)animated</strong> ，在方法中添加需要实现的方法。这里有个问题解释下，为什么umeng_viewWillAppear又调用了自身？首先我们通过Method Swizzling之后，这两个方法的实现是被交换的，也就是说在定义的时候这样写，但是在实际调用的时候这个方法调用的viewWillAppear，而在viewWillAppear中调用的是umeng_viewWillAppear。</p>
 </li>
@@ -324,8 +326,6 @@
 <li><p>触发时间，是通过 <strong>+ (void)load</strong> 方法来触发。关于这个方法的调用时间是在类被加载的时候调用的，此外load方法还有一个非常重要的特性，那就是子类、父类和分类中的load方法的实现是被区别对待的。换句话说在 Objective-C runtime 自动调用load方法时，分类中的load方法并不会对主类中的load方法造成覆盖。</p>
 </li>
 </ol>
-</li>
-</ul>
 <h1 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h1><p>至此，有关于这个系列的所有文章都已经结束，希望大家能够从文章有所收获，在自己的项目里面用到这些，多思考多重构。</p>
 </span>
       
