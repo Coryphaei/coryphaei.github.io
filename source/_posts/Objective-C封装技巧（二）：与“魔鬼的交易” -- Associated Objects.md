@@ -85,6 +85,85 @@ objc_setAssociatedObject(array, &overviewKey, nil, OBJC_ASSOCIATION_ASSIGN);
 
 > 关联对象的释放时机与移除时机并不总是一致，比如实验中用关联策略 OBJC_ASSOCIATION_ASSIGN 进行关联的对象，很早就已经被释放了，但是并没有被移除，而再使用这个关联对象时就会造成 Crash 。
 
+## 代码示例
+这里附上[Yaoyuan](https://github.com/ibireme)大神对于Associated Objects的具体实现：
+
+**UIBarButtonItem+YYAdd.h**
+```objc
+#import <UIKit/UIKit.h>
+
+/**
+ Provides extensions for `UIBarButtonItem`.
+ */
+@interface UIBarButtonItem (YYAdd)
+
+/**
+ The block that invoked when the item is selected. The objects captured by block
+ will retained by the ButtonItem.
+
+ @discussion This param is conflict with `target` and `action` property.
+ Set this will set `target` and `action` property to some internal objects.
+ */
+@property (nonatomic, copy) void (^actionBlock)(id);
+
+@end
+```
+
+**UIBarButtonItem+YYAdd.m**
+```objc
+#import "UIBarButtonItem+YYAdd.h"
+#import "YYCategoriesMacro.h"
+#import <objc/runtime.h>
+
+YYSYNTH_DUMMY_CLASS(UIBarButtonItem_YYAdd)
+
+
+static const int block_key;
+
+@interface _YYUIBarButtonItemBlockTarget : NSObject
+
+@property (nonatomic, copy) void (^block)(id sender);
+
+- (id)initWithBlock:(void (^)(id sender))block;
+- (void)invoke:(id)sender;
+
+@end
+
+@implementation _YYUIBarButtonItemBlockTarget
+
+- (id)initWithBlock:(void (^)(id sender))block{
+    self = [super init];
+    if (self) {
+        _block = [block copy];
+    }
+    return self;
+}
+
+- (void)invoke:(id)sender {
+    if (self.block) self.block(sender);
+}
+
+@end
+
+
+@implementation UIBarButtonItem (YYAdd)
+
+- (void)setActionBlock:(void (^)(id sender))block {
+    _YYUIBarButtonItemBlockTarget *target = [[_YYUIBarButtonItemBlockTarget alloc] initWithBlock:block];
+    objc_setAssociatedObject(self, &block_key, target, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+    [self setTarget:target];
+    [self setAction:@selector(invoke:)];
+}
+
+- (void (^)(id)) actionBlock {
+    _YYUIBarButtonItemBlockTarget *target = objc_getAssociatedObject(self, &block_key);
+    return target.block;
+}
+
+@end
+```
+
 # 总结
 对于Associated Objects，提供一种为Category添加自定义属性的方法。那么，在我们有自定义属性的时候，我们去使用继承还是使用Associated Objects呢？[Yaoyuan](https://github.com/ibireme)大神在issue中这样回复我：
 ![比较](http://7xkvt5.com1.z0.glb.clouddn.com/package%2FAssociatedObjects.png)
