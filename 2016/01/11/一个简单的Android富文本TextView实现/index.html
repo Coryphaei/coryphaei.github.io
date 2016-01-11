@@ -1,0 +1,859 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Java,RichTextview," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Coryphaei技术博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="Android客户端富文本现阶段问题在Android客户端展现一个普通数据非常的方便，直接调用textview.setText()方法，但是当TextView比较复杂时（例如存在@用户，##话题，部分字符样式、网址链接等），普通的TextView就无法完成需求，需要自己封装一个富文本TextView。
+DemoCoding 冒泡示例
+
+##
+分析1.一个TextView中不同类别的信息，需要由不同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个简单的Android富文本TextView实现">
+<meta property="og:url" content="http://blog.coryphaei.com/2016/01/11/一个简单的Android富文本TextView实现/index.html">
+<meta property="og:site_name" content="Coryphaei技术博客">
+<meta property="og:description" content="Android客户端富文本现阶段问题在Android客户端展现一个普通数据非常的方便，直接调用textview.setText()方法，但是当TextView比较复杂时（例如存在@用户，##话题，部分字符样式、网址链接等），普通的TextView就无法完成需求，需要自己封装一个富文本TextView。
+DemoCoding 冒泡示例
+
+##
+分析1.一个TextView中不同类别的信息，需要由不同">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/coding.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo1.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo2.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo3.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo4.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo5.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo6.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo7.png">
+<meta property="og:image" content="http://7xpvut.com1.z0.glb.clouddn.com/demo.gif">
+<meta property="og:updated_time" content="2016-01-11T03:13:23.725Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一个简单的Android富文本TextView实现">
+<meta name="twitter:description" content="Android客户端富文本现阶段问题在Android客户端展现一个普通数据非常的方便，直接调用textview.setText()方法，但是当TextView比较复杂时（例如存在@用户，##话题，部分字符样式、网址链接等），普通的TextView就无法完成需求，需要自己封装一个富文本TextView。
+DemoCoding 冒泡示例
+
+##
+分析1.一个TextView中不同类别的信息，需要由不同">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'hide',
+    motion: true
+  };
+</script>
+
+  <title> 一个简单的Android富文本TextView实现 | Coryphaei技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?4c234300b38c9119f8b85e05d946803c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Coryphaei技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一个简单的Android富文本TextView实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-01-11T03:12:00+00:00" content="2016-01-11">
+              2016-01-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Basti/" itemprop="url" rel="index">
+                    <span itemprop="name">Basti</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/11/一个简单的Android富文本TextView实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/11/一个简单的Android富文本TextView实现/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="Android_u5BA2_u6237_u7AEF_u5BCC_u6587_u672C"><a href="#Android_u5BA2_u6237_u7AEF_u5BCC_u6587_u672C" class="headerlink" title="Android客户端富文本"></a>Android客户端富文本</h1><h2 id="u73B0_u9636_u6BB5_u95EE_u9898"><a href="#u73B0_u9636_u6BB5_u95EE_u9898" class="headerlink" title="现阶段问题"></a>现阶段问题</h2><p>在Android客户端展现一个普通数据非常的方便，直接调用textview.setText()方法，但是当TextView比较复杂时（例如存在@用户，##话题，部分字符样式、网址链接等），普通的TextView就无法完成需求，需要自己封装一个富文本TextView。</p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>Coding 冒泡示例</p>
+<p><img src="http://7xpvut.com1.z0.glb.clouddn.com/coding.png" alt="image"></p>
+<p>##</p>
+<h2 id="u5206_u6790"><a href="#u5206_u6790" class="headerlink" title="分析"></a>分析</h2><p>1.一个TextView中不同类别的信息，需要由不同样式的显示，一般的用法textview.setTextColor(color)会将所有的文字变成同一种颜色，这显然是不符合要求的。为了实现这一个需求，我们将会用到SpannableStringBuilder这个类。</p>
+<h2 id="u9884_u5907_u77E5_u8BC6"><a href="#u9884_u5907_u77E5_u8BC6" class="headerlink" title="预备知识"></a>预备知识</h2><h3 id="SpannableStringBuilder_uFF1A"><a href="#SpannableStringBuilder_uFF1A" class="headerlink" title="SpannableStringBuilder："></a>SpannableStringBuilder：</h3><h4 id="u57FA_u672C_u6982_u5FF5"><a href="#u57FA_u672C_u6982_u5FF5" class="headerlink" title="基本概念"></a>基本概念</h4><p>SpannableStringBuilder 和 StringBuilder类似，都可以存储字符串，不同的是SpannableStringBuilder有一个setSpan()函数，可以给存储的String添加不同的样式。如加下划线、背景色、字体颜色、字体大小等。</p>
+<p>另外需要注意的是，当SpannableStringBuilder中存储了一个有样式的String，当把spannableStringBuilder展示在TextView、EditTextView中时，能显示这些样式；当展示在canvas上时，因为Canvas不支持SpannableStringBuilder的额外信息，所以会退化成一个普通的String,不显示样式信息。</p>
+<h4 id="setSpan_28_29_u51FD_u6570"><a href="#setSpan_28_29_u51FD_u6570" class="headerlink" title="setSpan()函数"></a>setSpan()函数</h4><p>void setSpan（Object what,int startIndex,int endIndex,int flag）;</p>
+<p>说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object what</td>
+<td style="text-align:left">设置Span样式</td>
+</tr>
+<tr>
+<td>int startIndex</td>
+<td style="text-align:left">样式开始的Index</td>
+</tr>
+<tr>
+<td>int endIndex</td>
+<td style="text-align:left">样式结束的Index</td>
+</tr>
+<tr>
+<td>int flag</td>
+<td style="text-align:left">新插入字符的样式设置</td>
+</tr>
+</tbody>
+</table>
+<p>注意点：</p>
+<ol>
+<li>endIndex:字体样式结束的Index，该Index对应的字符不使用样式，比如有一个字符串为s = “abcd”，s.setSpan(span,0,2,flag),此时第0、1个字符ab使用了样式span，endIndex对应的字符c不使用。</li>
+<li>flag:取值如下</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>取值</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spannable.SPAN_EXCLUSIVE_EXCLUSIVE</td>
+<td style="text-align:left">前后都不包括，即在指定范围的前面和后面插入新字符都不会应用新样式</td>
+</tr>
+<tr>
+<td>Spannable.SPAN_EXCLUSIVE_INCLUSIVE</td>
+<td style="text-align:left">前面不包括，后面包括。即仅在范围字符的后面插入新字符时会应用新样式</td>
+</tr>
+<tr>
+<td>Spannable.SPAN_INCLUSIVE_EXCLUSIVE</td>
+<td style="text-align:left">前面包括，后面不包括。</td>
+</tr>
+<tr>
+<td>Spannable.SPAN_INCLUSIVE_INCLUSIVE</td>
+<td style="text-align:left">前后都包括</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u7B80_u5355_u793A_u4F8B"><a href="#u7B80_u5355_u793A_u4F8B" class="headerlink" title="简单示例"></a>简单示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置字体颜色</span></span><br><span class="line">textview1 = (TextView) findViewById(R.id.text1);</span><br><span class="line">SpannableStringBuilder spannableStringBuilder1 = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line">ForegroundColorSpan foregroundColorSpan = <span class="keyword">new</span> ForegroundColorSpan(Color.BLUE);</span><br><span class="line">spannableStringBuilder1.setSpan(foregroundColorSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">textview1.setText(spannableStringBuilder1);</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo1.png" alt="image"></p>
+<h4 id="u591A_u79CDSpan"><a href="#u591A_u79CDSpan" class="headerlink" title="多种Span"></a>多种Span</h4><p>由以上的简单示例我们可以看出，设置一个样式的一般步骤是：</p>
+<ol>
+<li>构造一个SpannableStringBuilder</li>
+<li>构造一个Span，并设置在SpannableStringBuilder上</li>
+<li>将SpannableStringBuilder绑定在TextView上展示</li>
+</ol>
+<h5 id="u8BBE_u7F6E_u5B57_u4F53_u989C_u8272"><a href="#u8BBE_u7F6E_u5B57_u4F53_u989C_u8272" class="headerlink" title="设置字体颜色"></a>设置字体颜色</h5><p>这个已经在简单示例中展示</p>
+<h5 id="u8BBE_u7F6E_u5B57_u4F53_u80CC_u666F_u989C_u8272"><a href="#u8BBE_u7F6E_u5B57_u4F53_u80CC_u666F_u989C_u8272" class="headerlink" title="设置字体背景颜色"></a>设置字体背景颜色</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置字体背景颜色</span></span><br><span class="line">textview2 = (TextView) findViewById(R.id.text2);</span><br><span class="line">SpannableStringBuilder spannableStringBuilder2 = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line">BackgroundColorSpan backgroundColorSpan = <span class="keyword">new</span> BackgroundColorSpan(Color.RED);</span><br><span class="line">spannableStringBuilder2.setSpan(backgroundColorSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">textview2.setText(spannableStringBuilder2);</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo2.png" alt="image"></p>
+<h5 id="u8BBE_u7F6E_u5B57_u4F53_u5927_u5C0F"><a href="#u8BBE_u7F6E_u5B57_u4F53_u5927_u5C0F" class="headerlink" title="设置字体大小"></a>设置字体大小</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置字体大小</span></span><br><span class="line">textview3 = (TextView) findViewById(R.id.text3);</span><br><span class="line">SpannableStringBuilder spannableStringBuilder3 = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line">AbsoluteSizeSpan absoluteSizeSpan = <span class="keyword">new</span> AbsoluteSizeSpan(<span class="number">30</span>);</span><br><span class="line">spannableStringBuilder3.setSpan(absoluteSizeSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">textview3.setText(spannableStringBuilder3);</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo3.png" alt="image"></p>
+<h5 id="u8BBE_u7F6E_u5B57_u4F53"><a href="#u8BBE_u7F6E_u5B57_u4F53" class="headerlink" title="设置字体"></a>设置字体</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置字体(加粗斜体)</span></span><br><span class="line">textview4 = (TextView) findViewById(R.id.text4);</span><br><span class="line">SpannableStringBuilder spannableStringBuilder4 = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line">StyleSpan styleSpan = <span class="keyword">new</span> StyleSpan(Typeface.BOLD_ITALIC);</span><br><span class="line">spannableStringBuilder4.setSpan(styleSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">textview4.setText(spannableStringBuilder4);</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo4.png" alt="image"></p>
+<h5 id="u8BBE_u7F6E_u4E0B_u5212_u7EBF"><a href="#u8BBE_u7F6E_u4E0B_u5212_u7EBF" class="headerlink" title="设置下划线"></a>设置下划线</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置下划线</span></span><br><span class="line">textview5 = (TextView) findViewById(R.id.text5);</span><br><span class="line">SpannableStringBuilder spannableStringBuilder5 = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line">UnderlineSpan underlineSpan = <span class="keyword">new</span> UnderlineSpan();</span><br><span class="line">spannableStringBuilder5.setSpan(underlineSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">textview5.setText(spannableStringBuilder5);</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo5.png" alt="image"></p>
+<h5 id="u8BBE_u7F6E_u4E0B_u5212_u7EBF-1"><a href="#u8BBE_u7F6E_u4E0B_u5212_u7EBF-1" class="headerlink" title="设置下划线"></a>设置下划线</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置删除线</span></span><br><span class="line">textview6 = (TextView) findViewById(R.id.text6);</span><br><span class="line">SpannableStringBuilder spannableStringBuilder6 = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line">StrikethroughSpan strikethroughSpan = <span class="keyword">new</span> StrikethroughSpan();</span><br><span class="line">spannableStringBuilder6.setSpan(strikethroughSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">textview6.setText(spannableStringBuilder6);</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo6.png" alt="image"></p>
+<h5 id="u8BBE_u7F6E_u591A_u79CD_u6837_u5F0F"><a href="#u8BBE_u7F6E_u591A_u79CD_u6837_u5F0F" class="headerlink" title="设置多种样式"></a>设置多种样式</h5><p>除了设置一个样式以外，SpannableStringBuilder还支持设置多个样式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置多种样式</span></span><br><span class="line">textview7 = (TextView) findViewById(R.id.text7);</span><br><span class="line">SpannableStringBuilder spannableStringBuilder7 = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line">spannableStringBuilder7.setSpan(foregroundColorSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">spannableStringBuilder7.setSpan(backgroundColorSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">spannableStringBuilder7.setSpan(underlineSpan, <span class="number">0</span>, <span class="number">3</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">spannableStringBuilder7.setSpan(absoluteSizeSpan, <span class="number">3</span>, <span class="number">6</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">spannableStringBuilder7.setSpan(strikethroughSpan, <span class="number">3</span>, <span class="number">6</span>, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);</span><br><span class="line">textview7.setText(spannableStringBuilder7);</span><br></pre></td></tr></table></figure></p>
+<p>效果：<br><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo7.png" alt="image"></p>
+<h5 id="u70B9_u51FB_u4E8B_u4EF6"><a href="#u70B9_u51FB_u4E8B_u4EF6" class="headerlink" title="点击事件"></a>点击事件</h5><p>实例代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">SpannableStringBuilder spannableStringBuilder = <span class="keyword">new</span> SpannableStringBuilder(<span class="string">"Android"</span>);</span><br><span class="line"></span><br><span class="line">spannableStringBuilder.setSpan(</span><br><span class="line">    <span class="keyword">new</span> ClickableSpan() &#123;</span><br><span class="line">        <span class="annotation">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View widget)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//do something</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="annotation">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateDrawState</span><span class="params">(TextPaint ds)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//设置一些样式</span></span><br><span class="line">            <span class="comment">//ds.setUnderlineText(false);</span></span><br><span class="line">            <span class="comment">//ds.setColor(color);</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, startIndex, endIndex,</span><br><span class="line">    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h4 id="u7B80_u5355_u5B9E_u73B0"><a href="#u7B80_u5355_u5B9E_u73B0" class="headerlink" title="简单实现"></a>简单实现</h4><ol>
+<li>以Listview为例，我们需要实现的是每一个Item和Adapter中的getView()函数。</li>
+<li>布局文件<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">RelativeLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="title">ImageView</span></span><br><span class="line">        <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">        <span class="attribute">android:src</span>=<span class="value">"@mipmap/ic_launcher"</span></span><br><span class="line">        <span class="attribute">android:layout_marginTop</span>=<span class="value">"16dp"</span></span><br><span class="line">        <span class="attribute">android:layout_marginLeft</span>=<span class="value">"16dp"</span></span><br><span class="line">        <span class="attribute">android:id</span>=<span class="value">"@+id/userhead"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="title">TextView</span></span><br><span class="line">        <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">        <span class="attribute">android:layout_marginTop</span>=<span class="value">"16dp"</span></span><br><span class="line">        <span class="attribute">android:layout_marginLeft</span>=<span class="value">"8dp"</span></span><br><span class="line">        <span class="attribute">android:layout_marginRight</span>=<span class="value">"16dp"</span></span><br><span class="line">        <span class="attribute">android:layout_toRightOf</span>=<span class="value">"@id/userhead"</span></span><br><span class="line">        <span class="attribute">android:id</span>=<span class="value">"@+id/content"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">RelativeLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>ImageView表示该Item的发布人，和富文本没有关系，在Demo中直接写死数据。<br>主要内容在TextView中</p>
+<ol>
+<li>因为每一个TextView中可能有多个不同样式的文本（#话题#，@其他用户，文本内容等），所以先封装一个文本类：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TextObject</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mStartIndex;<span class="comment">//样式的开始字符</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mEndIndex;<span class="comment">//结束字符</span></span><br><span class="line">    <span class="comment">//private SpannableStringBuilder mSpannableStringBuilder;</span></span><br><span class="line">    <span class="keyword">private</span> String content;<span class="comment">//文本内容</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> mOptionType;<span class="comment">//操作符</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> color;<span class="comment">//字体颜色</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> isUnderline;<span class="comment">//是否有下划线</span></span><br><span class="line">    <span class="comment">//...其他需要的属性可继承TextObject自行添加</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这个类封装的是一个Item中的某一个文本样式，所以我们还需要封装一个Item中的文本类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Content</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;TextObject&gt; mList;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> SpannableStringBuilder mSpannableStringBuilder;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个类中有一个List成员变量，存放着该Item中所有的样式文本。<br>对于成员变量SpannableStringBuilder，有一个init函数，用于根据List中的TextObject拼接StringBuilder<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//拼接SpannableStringBuilder</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initStringBuilder</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    SpannableStringBuilder spannableStringBuilder = <span class="keyword">new</span> SpannableStringBuilder();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;mList.size();i++)&#123;</span><br><span class="line">        spannableStringBuilder.append(mList.get(i).getContent());</span><br><span class="line">    &#125;</span><br><span class="line">    setmSpannableStringBuilder(spannableStringBuilder);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>到现在，数据准备工作已经全部完成，现在就要显示这些数据了。</p>
+<ol>
+<li>getView()函数</li>
+</ol>
+<p>getview函数中就可以通过content.getSpannableStringBuilder()函数获取到正文内容，然后即可根据上面的预备知识对其进行设置不同的样式和点击事件。<br>设置完成后，需要调用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">viewHolder.textview.setMovementMethod(LinkMovementMethod.getInstance());</span><br></pre></td></tr></table></figure></p>
+<p>使其响应点击事件。</p>
+<h5 id="Demo_u6548_u679C_uFF1A"><a href="#Demo_u6548_u679C_uFF1A" class="headerlink" title="Demo效果："></a>Demo效果：</h5><p><img src="http://7xpvut.com1.z0.glb.clouddn.com/demo.gif" alt="image"></p>
+<h4 id="Demo_u5730_u5740"><a href="#Demo_u5730_u5740" class="headerlink" title="Demo地址"></a>Demo地址</h4><p><a href="https://github.com/basti-shi031/RichTextView" target="_blank" rel="external">Github项目地址</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+            <a href="/tags/RichTextview/" rel="tag">#RichTextview</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/06/Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling/" rel="next" title="Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling">
+                <i class="fa fa-chevron-left"></i> Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/01/11/一个简单的Android富文本TextView实现/"
+           data-title="一个简单的Android富文本TextView实现" data-url="http://blog.coryphaei.com/2016/01/11/一个简单的Android富文本TextView实现/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://7xp57v.com1.z0.glb.clouddn.com/coryphaeicoryphaei.gif" alt="coryphaei" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">coryphaei</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Coryphaei技术分享博客。</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Coryphaei" target="_blank">Corypahei</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android_u5BA2_u6237_u7AEF_u5BCC_u6587_u672C"><span class="nav-number">1.</span> <span class="nav-text">Android客户端富文本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u73B0_u9636_u6BB5_u95EE_u9898"><span class="nav-number">1.1.</span> <span class="nav-text">现阶段问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo"><span class="nav-number">1.2.</span> <span class="nav-text">Demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5206_u6790"><span class="nav-number">1.3.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u9884_u5907_u77E5_u8BC6"><span class="nav-number">1.4.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpannableStringBuilder_uFF1A"><span class="nav-number">1.4.1.</span> <span class="nav-text">SpannableStringBuilder：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u57FA_u672C_u6982_u5FF5"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setSpan_28_29_u51FD_u6570"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">setSpan()函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u7B80_u5355_u793A_u4F8B"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">简单示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u591A_u79CDSpan"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">多种Span</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#u8BBE_u7F6E_u5B57_u4F53_u989C_u8272"><span class="nav-number">1.4.1.4.1.</span> <span class="nav-text">设置字体颜色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#u8BBE_u7F6E_u5B57_u4F53_u80CC_u666F_u989C_u8272"><span class="nav-number">1.4.1.4.2.</span> <span class="nav-text">设置字体背景颜色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#u8BBE_u7F6E_u5B57_u4F53_u5927_u5C0F"><span class="nav-number">1.4.1.4.3.</span> <span class="nav-text">设置字体大小</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#u8BBE_u7F6E_u5B57_u4F53"><span class="nav-number">1.4.1.4.4.</span> <span class="nav-text">设置字体</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#u8BBE_u7F6E_u4E0B_u5212_u7EBF"><span class="nav-number">1.4.1.4.5.</span> <span class="nav-text">设置下划线</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#u8BBE_u7F6E_u4E0B_u5212_u7EBF-1"><span class="nav-number">1.4.1.4.6.</span> <span class="nav-text">设置下划线</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#u8BBE_u7F6E_u591A_u79CD_u6837_u5F0F"><span class="nav-number">1.4.1.4.7.</span> <span class="nav-text">设置多种样式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#u70B9_u51FB_u4E8B_u4EF6"><span class="nav-number">1.4.1.4.8.</span> <span class="nav-text">点击事件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u7B80_u5355_u5B9E_u73B0"><span class="nav-number">1.4.1.5.</span> <span class="nav-text">简单实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Demo_u6548_u679C_uFF1A"><span class="nav-number">1.4.1.5.1.</span> <span class="nav-text">Demo效果：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Demo_u5730_u5740"><span class="nav-number">1.4.1.6.</span> <span class="nav-text">Demo地址</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">coryphaei</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"coryphaei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/MathJax.js"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
+  
+
+
+  
+  
+
+</body>
+</html>
