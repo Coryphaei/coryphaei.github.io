@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Objective-C,Swizzling,iOS,封装," />
+  <meta name="keywords" content="iOS,Objective-C,封装,Swizzling," />
 
 
 
@@ -62,11 +62,12 @@
 <meta property="og:description" content="写在前面有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。
 平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。">
 <meta property="og:image" content="http://7xkvt5.com1.z0.glb.clouddn.com/package%2FUMeng.png">
-<meta property="og:updated_time" content="2016-01-11T03:13:23.725Z">
+<meta property="og:updated_time" content="2016-03-15T02:48:09.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling">
 <meta name="twitter:description" content="写在前面有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。
 平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。">
+<meta name="twitter:image" content="http://7xkvt5.com1.z0.glb.clouddn.com/package%2FUMeng.png">
 
 
 
@@ -283,20 +284,20 @@
       
 
       
-        <span itemprop="articleBody"><h1 id="u5199_u5728_u524D_u9762"><a href="#u5199_u5728_u524D_u9762" class="headerlink" title="写在前面"></a>写在前面</h1><p>有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。</p>
+        <span itemprop="articleBody"><h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><p>有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。</p>
 <p>平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。</p>
 <ul>
 <li><a href="http://blog.coryphaei.com/2016/01/05/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9ACategory%E5%92%8C%E7%BB%A7%E6%89%BF%E7%9A%84%E5%8D%9A%E5%BC%88/">Objective-C封装技巧（一）：Category和继承的博弈</a></li>
 <li><a href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E4%B8%8E%E2%80%9C%E9%AD%94%E9%AC%BC%E7%9A%84%E4%BA%A4%E6%98%93%E2%80%9D%20--%20Associated%20Objects/">Objective-C封装技巧（二）：与“魔鬼的交易” – Associated Objects</a></li>
 <li><a href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E6%AF%94%E7%BB%A7%E6%89%BF%E6%9B%B4%E5%8A%A0%E7%81%B5%E6%B4%BB%E7%9A%84overwrite%E6%96%B9%E6%B3%95%20--%20Method%20Swizzling/">Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 – Method Swizzling</a></li>
 </ul>
-<h1 id="u63D0_u51FA_u95EE_u9898"><a href="#u63D0_u51FA_u95EE_u9898" class="headerlink" title="提出问题"></a>提出问题</h1><p>希望大家在看系列文章之前，首先思考下面提出的几个问题：</p>
+<h1 id="提出问题"><a href="#提出问题" class="headerlink" title="提出问题"></a>提出问题</h1><p>希望大家在看系列文章之前，首先思考下面提出的几个问题：</p>
 <ol>
 <li>对于方法封装，我们平时经常使用的就是继承子类化Base基类和使用Category，那么在使用这两个方法是具体场景是什么？它们之前的区别和使用优先原则是什么？</li>
 <li>Category不允许自定义实例属性的缺点，可以用什么来弥补？（提示：Associated Objects）Associated Objects的具体使用场景又是什么呢？</li>
 <li>对于需要重复写的通用方法，又存在生命周期中的方法，除了工厂方法继承多个工厂类，还有没有更好的封装机制？（提示：Method Swizzling）关于Method Swizzling的使用场景和机制是什么？<br>本篇博客对第三个问题进行回答分析，如果阐述过程中有错误或者疑问，大家可以在文章下面留言。</li>
 </ol>
-<h1 id="u524D_u63D0"><a href="#u524D_u63D0" class="headerlink" title="前提"></a>前提</h1><p>在我们对继承进行使用的时候，通常有个使用场景，类似于UMeng的对用户行为进行追踪和分析的操作。通常有这么三种做法：</p>
+<h1 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h1><p>在我们对继承进行使用的时候，通常有个使用场景，类似于UMeng的对用户行为进行追踪和分析的操作。通常有这么三种做法：</p>
 <ul>
 <li>简单粗暴，直接修改每个页面的 <strong>view controller</strong> 代码，简单粗暴；</li>
 <li>子类化一个Base基类，在基类的 <strong>view controller</strong> 代码里面进行操作；</li>
@@ -304,15 +305,15 @@
 <li>Method Swizzling<br><img src="http://7xkvt5.com1.z0.glb.clouddn.com/package%2FUMeng.png" alt="UMeng"></li>
 </ul>
 <p>1，2，3两种的方法，通常会造成大量的重复代码，显得代码很不优雅。1的方法还会存在忘记添加的情况，2的方法存在需要子类化多个子类，如 <strong>UIViewController</strong> 、 <strong>UITableViewController</strong> 、 <strong>UINavigationController</strong>。3的方法只能对代码量并没有缩减，用在这个场景下也不合适。</p>
-<h1 id="Method_Swizzling"><a href="#Method_Swizzling" class="headerlink" title="Method Swizzling"></a>Method Swizzling</h1><p>这个时候我们想用优雅的方式来解决这个问题，既不影响当前方法的实现，又能够在方法注入一些新的操作，动态的来增加方法。我们引入了runtime中的技术方案 – Method Swizzling。利用的是@selector机制，修改响应事件或者方法所对应的函数指针。</p>
-<h2 id="u4F7F_u7528_u573A_u666F"><a href="#u4F7F_u7528_u573A_u666F" class="headerlink" title="使用场景"></a>使用场景</h2><p>大致可以概括成下列三个场景：</p>
+<h1 id="Method-Swizzling"><a href="#Method-Swizzling" class="headerlink" title="Method Swizzling"></a>Method Swizzling</h1><p>这个时候我们想用优雅的方式来解决这个问题，既不影响当前方法的实现，又能够在方法注入一些新的操作，动态的来增加方法。我们引入了runtime中的技术方案 – Method Swizzling。利用的是@selector机制，修改响应事件或者方法所对应的函数指针。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>大致可以概括成下列三个场景：</p>
 <ul>
 <li>在向视图控制器的生命周期中注入操作、事件的响应、视图的绘制；</li>
 <li>Foundation中的网络堆栈中对于调用时机的记录；</li>
 <li>类似于Logging，Analytics，Authentication和Caching。这些事务琐碎，跟主要业务逻辑无关，在很多地方都有，又很难抽象出来单独的模块。</li>
 </ul>
-<h2 id="u4EE3_u7801"><a href="#u4EE3_u7801" class="headerlink" title="代码"></a>代码</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#import <span class="title">&lt;objc/runtime.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#import <span class="title">"MobClick.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UIViewController</span> (<span class="title">MRCUMAnalytics</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">UIViewController</span> (<span class="title">YFUMengAnalytics</span>)</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)swizzleMethod(Class class, SEL originalSelector, SEL swizzledSelector) &#123;</span><br><span class="line">    <span class="comment">// the method might not exist in the class, but in its superclass</span></span><br><span class="line">    Method originalMethod = class_getInstanceMethod(class, originalSelector);</span><br><span class="line">    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// class_addMethod will fail if original method already exists</span></span><br><span class="line">    <span class="built_in">BOOL</span> didAddMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the method doesn’t exist and we just added one</span></span><br><span class="line">    <span class="keyword">if</span> (didAddMethod) &#123;</span><br><span class="line">        class_replaceMethod(class, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        method_exchangeImplementations(originalMethod, swizzledMethod);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">void</span>)load &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">        Class class = [<span class="keyword">self</span> class];</span><br><span class="line">        <span class="comment">// When swizzling a class method, use the following:</span></span><br><span class="line">        <span class="comment">// Class class = object_getClass((id)self);</span></span><br><span class="line">        swizzleMethod(class, <span class="keyword">@selector</span>(viewDidAppear:), <span class="keyword">@selector</span>(umeng_viewWillAppear:));</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)umeng_viewWillAppear:(<span class="built_in">BOOL</span>)animated &#123;</span><br><span class="line">    [<span class="keyword">self</span> umeng_viewWillAppear:animated];</span><br><span class="line">    [MobClick beginLogPageView:<span class="built_in">NSStringFromClass</span>([<span class="keyword">self</span> class])];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<h2 id="u89E3_u91CA"><a href="#u89E3_u91CA" class="headerlink" title="解释"></a>解释</h2><ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"MobClick.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UIViewController</span> (<span class="title">MRCUMAnalytics</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">UIViewController</span> (<span class="title">YFUMengAnalytics</span>)</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)swizzleMethod(Class class, SEL originalSelector, SEL swizzledSelector) &#123;</span><br><span class="line">    <span class="comment">// the method might not exist in the class, but in its superclass</span></span><br><span class="line">    Method originalMethod = class_getInstanceMethod(class, originalSelector);</span><br><span class="line">    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// class_addMethod will fail if original method already exists</span></span><br><span class="line">    <span class="built_in">BOOL</span> didAddMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the method doesn’t exist and we just added one</span></span><br><span class="line">    <span class="keyword">if</span> (didAddMethod) &#123;</span><br><span class="line">        class_replaceMethod(class, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        method_exchangeImplementations(originalMethod, swizzledMethod);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">void</span>)load &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">        Class class = [<span class="keyword">self</span> class];</span><br><span class="line">        <span class="comment">// When swizzling a class method, use the following:</span></span><br><span class="line">        <span class="comment">// Class class = object_getClass((id)self);</span></span><br><span class="line">        swizzleMethod(class, <span class="keyword">@selector</span>(viewDidAppear:), <span class="keyword">@selector</span>(umeng_viewWillAppear:));</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)umeng_viewWillAppear:(<span class="built_in">BOOL</span>)animated &#123;</span><br><span class="line">    [<span class="keyword">self</span> umeng_viewWillAppear:animated];</span><br><span class="line">    [MobClick beginLogPageView:<span class="built_in">NSStringFromClass</span>([<span class="keyword">self</span> class])];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<h2 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h2><ul>
 <li><p>不需要显性调用<br>我们发现我们使用了Method Swizzling之后，对现有的方法进行了新方法的注入，我们在调用现有方法的时候，就会自动触发我们注入的方法。这种做法非常类似于Hook。</p>
 </li>
 <li><p>步骤</p>
@@ -326,7 +327,7 @@
 <li><p>触发时间，是通过 <strong>+ (void)load</strong> 方法来触发。关于这个方法的调用时间是在类被加载的时候调用的，此外load方法还有一个非常重要的特性，那就是子类、父类和分类中的load方法的实现是被区别对待的。换句话说在 Objective-C runtime 自动调用load方法时，分类中的load方法并不会对主类中的load方法造成覆盖。</p>
 </li>
 </ol>
-<h1 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h1><p>至此，有关于这个系列的所有文章都已经结束，希望大家能够从文章有所收获，在自己的项目里面用到这些，多思考多重构。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>至此，有关于这个系列的所有文章都已经结束，希望大家能够从文章有所收获，在自己的项目里面用到这些，多思考多重构。</p>
 </span>
       
     </div>
@@ -335,13 +336,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Objective-C/" rel="tag">#Objective-C</a>
-          
-            <a href="/tags/Swizzling/" rel="tag">#Swizzling</a>
-          
             <a href="/tags/iOS/" rel="tag">#iOS</a>
           
+            <a href="/tags/Objective-C/" rel="tag">#Objective-C</a>
+          
             <a href="/tags/封装/" rel="tag">#封装</a>
+          
+            <a href="/tags/Swizzling/" rel="tag">#Swizzling</a>
           
         </div>
       
@@ -492,7 +493,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#u5199_u5728_u524D_u9762"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u63D0_u51FA_u95EE_u9898"><span class="nav-number">2.</span> <span class="nav-text">提出问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u524D_u63D0"><span class="nav-number">3.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method_Swizzling"><span class="nav-number">4.</span> <span class="nav-text">Method Swizzling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u4F7F_u7528_u573A_u666F"><span class="nav-number">4.1.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4EE3_u7801"><span class="nav-number">4.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u89E3_u91CA"><span class="nav-number">4.3.</span> <span class="nav-text">解释</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提出问题"><span class="nav-number">2.</span> <span class="nav-text">提出问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前提"><span class="nav-number">3.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method-Swizzling"><span class="nav-number">4.</span> <span class="nav-text">Method Swizzling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">4.1.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">4.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解释"><span class="nav-number">4.3.</span> <span class="nav-text">解释</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
