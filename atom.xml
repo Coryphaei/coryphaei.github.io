@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.coryphaei.com/"/>
-  <updated>2016-03-20T09:57:14.402Z</updated>
+  <updated>2016-03-20T10:03:39.725Z</updated>
   <id>http://blog.coryphaei.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.coryphaei.com/2016/03/17/sqlmap-%E5%9F%BA%E4%BA%8Esql%E6%B3%A8%E5%85%A5%E7%9A%84%E6%95%B0%E6%8D%AE%E7%8C%9C%E8%A7%A3/"/>
     <id>http://blog.coryphaei.com/2016/03/17/sqlmap-基于sql注入的数据猜解/</id>
     <published>2016-03-17T02:47:52.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h3 id=&quot;引言&quot;&gt;&lt;a href=&quot;#引言&quot; class=&quot;headerlink&quot; title=&quot;引言&quot;&gt;&lt;/a&gt;引言&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/sqlmapproject/sqlmap&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;sqlmap&lt;/a&gt;是一款基于python语言的自动化检测web项目是否有sql注入的测试工具，不过这也是很多黑客的必备工具之一，今天我们就用sqlmap，向大家演示一次完整的数据库入侵过程。&lt;/p&gt;
 &lt;h3 id=&quot;关于sql注入&quot;&gt;&lt;a href=&quot;#关于sql注入&quot; class=&quot;headerlink&quot; title=&quot;关于sql注入&quot;&gt;&lt;/a&gt;关于sql注入&lt;/h3&gt;&lt;p&gt;sql注入只要是写过web项目的人应该都听说过，sql注入是如何产生的呢？我们来举个例子，比如我们写一个sql语句：”select * from users where username= xiaoming” 看似这个sql语句没有什么错误，无可厚非，xiaoming是我们要传入的参数，一般由用户输入，不过如果用户输入的是 xiaoming or 1=1 会怎么样呢？&lt;/p&gt;
@@ -60,7 +60,7 @@
     <link href="http://blog.coryphaei.com/2016/03/17/druid-%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE/"/>
     <id>http://blog.coryphaei.com/2016/03/17/druid-数据源配置/</id>
     <published>2016-03-17T02:12:46.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;druid数据连接池是阿里巴巴旗下出的一款数据库连接池jar包，我个人觉得还是蛮好用的，这里附上&lt;a href=&quot;http://mvnrepository.com/artifact/com.alibaba/druid&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;maven repository的地址&lt;/a&gt;,下载jar包也好，还是maven配置也好，这里都有。如何向参考具体的项目，可以去我&lt;a href=&quot;https://github.com/xiaowei1118&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;github&lt;/a&gt;上看看&lt;a href=&quot;https://github.com/xiaowei1118/java_server&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;java_server&lt;/a&gt;这个项目，这个项目就是基于druid数据源配置的SpringMVC+spring+mybatis的。&lt;/p&gt;
 &lt;h3 id=&quot;以下是数据源连接配置&quot;&gt;&lt;a href=&quot;#以下是数据源连接配置&quot; class=&quot;headerlink&quot; title=&quot;以下是数据源连接配置&quot;&gt;&lt;/a&gt;以下是数据源连接配置&lt;/h3&gt;&lt;h4 id=&quot;jndi方式数据源配置&quot;&gt;&lt;a href=&quot;#jndi方式数据源配置&quot; class=&quot;headerlink&quot; title=&quot;jndi方式数据源配置&quot;&gt;&lt;/a&gt;jndi方式数据源配置&lt;/h4&gt;&lt;p&gt;在spring里面设置数据库连接方式为jndi配置:&lt;br&gt;&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;dataSource&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;org.springframework.jndi.JndiObjectFactoryBean&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;property&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;jndiName&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;value&lt;/span&gt;&amp;gt;&lt;/span&gt;java:comp/env/jdbc/demoDB&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;value&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;property&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;bean&lt;/span&gt;&amp;gt;&lt;/span&gt;  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;jdbcTemplate&quot;&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;property&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;dataSource&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;ref&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;bean&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;dataSource&quot;&lt;/span&gt; /&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;property&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;bean&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
@@ -77,7 +77,7 @@
     
     </summary>
     
-      <category term="coding" scheme="http://blog.coryphaei.com/categories/coding/"/>
+      <category term="twist.zheng" scheme="http://blog.coryphaei.com/categories/twist-zheng/"/>
     
     
       <category term="Java" scheme="http://blog.coryphaei.com/tags/Java/"/>
@@ -89,7 +89,7 @@
     <link href="http://blog.coryphaei.com/2016/03/16/Java-%E6%A8%A1%E6%8B%9Fcpu%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6/"/>
     <id>http://blog.coryphaei.com/2016/03/16/Java-模拟cpu线程调度/</id>
     <published>2016-03-16T09:41:53.000Z</published>
-    <updated>2016-03-20T09:57:14.398Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这篇是我早前写在csdn上的操作系统作业，如果你也有这个作业，可以作为参考，原来的博客这里就只字不改了，这也是种不错的感觉。这里贴出优先数算法的代码，在源码中附带了时间片轮转算法和段作业优先算法的算法。&lt;/p&gt;
 &lt;h3 id=&quot;博客原文&quot;&gt;&lt;a href=&quot;#博客原文&quot; class=&quot;headerlink&quot; title=&quot;博客原文&quot;&gt;&lt;/a&gt;博客原文&lt;/h3&gt;&lt;p&gt;这本来是我的操作系统作业，斑竹本来想偷懒在网上找一篇交上去，但无奈没有找到符合的，只好自己写了。言归正传，在这个例子中，我实现了进程调度的三种算法，分别是优先级算法，时间片算法，和段作业优先算法（fcfs算法比较简单，这里就不做说明了，读者可以根据斑竹的思路自己写）。在写这个程序的时候，斑竹感觉也挺麻烦的，没有具体的思路，但第二天就要交了，没办法，斑竹在前一天晚上终于想通了关键。那就是，不论是哪一种算法，只要能列出在个时间段当前在运行的进程就好了，剩下的求响应时间，周转时间，甘特图什么的就一样了。&lt;br&gt;废话少说，这里贴出代码，如果心急的朋友，可以直接去下载&lt;a href=&quot;http://download.csdn.net/detail/xiaowei1118/8261711&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;源码&lt;/a&gt;。&lt;/p&gt;
@@ -115,7 +115,7 @@
     
     </summary>
     
-      <category term="coding" scheme="http://blog.coryphaei.com/categories/coding/"/>
+      <category term="twist.zheng" scheme="http://blog.coryphaei.com/categories/twist-zheng/"/>
     
     
       <category term="Java" scheme="http://blog.coryphaei.com/tags/Java/"/>
@@ -127,7 +127,7 @@
     <link href="http://blog.coryphaei.com/2016/03/16/Maven%E4%B9%8B%E8%81%9A%E5%90%88%E5%92%8C%E7%BB%A7%E6%89%BF%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE/"/>
     <id>http://blog.coryphaei.com/2016/03/16/Maven之聚合和继承构建项目/</id>
     <published>2016-03-16T08:46:43.000Z</published>
-    <updated>2016-03-20T09:57:14.398Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;p&gt;如果你是一个JAVA攻城狮，那么你还是有很大几率会接触到Maven的，Maven是apache旗下推出的项目构建和包管理工具，如果你对Maven是什么不太了解，我推荐你还是可以去看看它的&lt;a href=&quot;http://maven.apache.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;官网&lt;/a&gt;。这里我们就不再赘述（也许以后我还会出关于Maven的博客)。&lt;/p&gt;
 &lt;h3 id=&quot;构建步骤&quot;&gt;&lt;a href=&quot;#构建步骤&quot; class=&quot;headerlink&quot; title=&quot;构建步骤&quot;&gt;&lt;/a&gt;构建步骤&lt;/h3&gt;&lt;h4 id=&quot;第一步&quot;&gt;&lt;a href=&quot;#第一步&quot; class=&quot;headerlink&quot; title=&quot;第一步&quot;&gt;&lt;/a&gt;第一步&lt;/h4&gt;&lt;p&gt;新建一个父maven工程，作为一个单独的maven的project工程，不包含源代码以及配置文件，pom文件中，package方式设置为pom方式，在ｐｏｍ中添加的依赖库将被子程序继承.配置如下：&lt;br&gt;&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;groupId&lt;/span&gt;&amp;gt;&lt;/span&gt;com.changyu.partent&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;groupId&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;artifactId&lt;/span&gt;&amp;gt;&lt;/span&gt;partent_demo&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;artifactId&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;packaging&lt;/span&gt;&amp;gt;&lt;/span&gt;pom&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;packaging&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;version&lt;/span&gt;&amp;gt;&lt;/span&gt;0.0.1-SNAPSHOT&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;version&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;name&lt;/span&gt;&amp;gt;&lt;/span&gt;partent_demo Maven Webapp&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;name&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;url&lt;/span&gt;&amp;gt;&lt;/span&gt;http://maven.apache.org&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;url&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;modules&lt;/span&gt;&amp;gt;&lt;/span&gt;   &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;module&lt;/span&gt;&amp;gt;&lt;/span&gt;child-task&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;module&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;module&lt;/span&gt;&amp;gt;&lt;/span&gt;child_web&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;module&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;module&lt;/span&gt;&amp;gt;&lt;/span&gt;common-changyu&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;module&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; &lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;modules&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
@@ -146,7 +146,7 @@
     
     </summary>
     
-      <category term="coding" scheme="http://blog.coryphaei.com/categories/coding/"/>
+      <category term="twist.zheng" scheme="http://blog.coryphaei.com/categories/twist-zheng/"/>
     
     
       <category term="Java" scheme="http://blog.coryphaei.com/tags/Java/"/>
@@ -160,7 +160,7 @@
     <link href="http://blog.coryphaei.com/2016/03/16/hexo-%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2%E5%88%A9%E5%99%A8/"/>
     <id>http://blog.coryphaei.com/2016/03/16/hexo-静态博客利器/</id>
     <published>2016-03-16T05:36:34.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;今天给大家介绍一件写静态博客的利器–&lt;strong&gt;&lt;a href=&quot;https://hexo.io&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;hexo&lt;/a&gt;&lt;/strong&gt;,你所看见的我的个人博客也是用hexo搭建的，简单易用，通过命令行操作，搭建在github上。本来我买了一个个人域名&lt;a href=&quot;http://twistzheng.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;twsitzheng.com&lt;/a&gt;指向博客的,不过因为是在国外网站买的（为了免去备案的麻烦），没用多久就被大天朝墙掉了–大天朝万能的墙啊！所以如果想买个人域名的话还是在大天朝买，老老实实去备案吧。&lt;/p&gt;
 &lt;p&gt;话不多说，说说hexo吧！&lt;/p&gt;
@@ -199,7 +199,7 @@
     
     </summary>
     
-      <category term="coding" scheme="http://blog.coryphaei.com/categories/coding/"/>
+      <category term="twist.zheng" scheme="http://blog.coryphaei.com/categories/twist-zheng/"/>
     
     
       <category term="hexo" scheme="http://blog.coryphaei.com/tags/hexo/"/>
@@ -211,7 +211,7 @@
     <link href="http://blog.coryphaei.com/2016/01/11/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84Android%E5%AF%8C%E6%96%87%E6%9C%ACTextView%E5%AE%9E%E7%8E%B0/"/>
     <id>http://blog.coryphaei.com/2016/01/11/一个简单的Android富文本TextView实现/</id>
     <published>2016-01-11T03:12:00.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;Android客户端富文本&quot;&gt;&lt;a href=&quot;#Android客户端富文本&quot; class=&quot;headerlink&quot; title=&quot;Android客户端富文本&quot;&gt;&lt;/a&gt;Android客户端富文本&lt;/h1&gt;&lt;h2 id=&quot;现阶段问题&quot;&gt;&lt;a href=&quot;#现阶段问题&quot; class=&quot;headerlink&quot; title=&quot;现阶段问题&quot;&gt;&lt;/a&gt;现阶段问题&lt;/h2&gt;&lt;p&gt;在Android客户端展现一个普通数据非常的方便，直接调用textview.setText()方法，但是当TextView比较复杂时（例如存在@用户，##话题，部分字符样式、网址链接等），普通的TextView就无法完成需求，需要自己封装一个富文本TextView。&lt;/p&gt;
 &lt;h2 id=&quot;Demo&quot;&gt;&lt;a href=&quot;#Demo&quot; class=&quot;headerlink&quot; title=&quot;Demo&quot;&gt;&lt;/a&gt;Demo&lt;/h2&gt;&lt;p&gt;Coding 冒泡示例&lt;/p&gt;
@@ -345,7 +345,7 @@
     <link href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E6%AF%94%E7%BB%A7%E6%89%BF%E6%9B%B4%E5%8A%A0%E7%81%B5%E6%B4%BB%E7%9A%84overwrite%E6%96%B9%E6%B3%95%20--%20Method%20Swizzling/"/>
     <id>http://blog.coryphaei.com/2016/01/06/Objective-C封装技巧（三）：比继承更加灵活的overwrite方法 -- Method Swizzling/</id>
     <published>2016-01-06T02:38:24.000Z</published>
-    <updated>2016-03-20T09:57:14.398Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h1&gt;&lt;p&gt;有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。&lt;/p&gt;
 &lt;p&gt;平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。&lt;/p&gt;
@@ -417,7 +417,7 @@
     <link href="http://blog.coryphaei.com/2016/01/06/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E4%B8%8E%E2%80%9C%E9%AD%94%E9%AC%BC%E7%9A%84%E4%BA%A4%E6%98%93%E2%80%9D%20--%20Associated%20Objects/"/>
     <id>http://blog.coryphaei.com/2016/01/06/Objective-C封装技巧（二）：与“魔鬼的交易” -- Associated Objects/</id>
     <published>2016-01-06T01:42:32.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h1&gt;&lt;p&gt;有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。&lt;/p&gt;
 &lt;p&gt;平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。&lt;/p&gt;
@@ -528,7 +528,7 @@
     <link href="http://blog.coryphaei.com/2016/01/05/Objective-C%E5%B0%81%E8%A3%85%E6%8A%80%E5%B7%A7%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9ACategory%E5%92%8C%E7%BB%A7%E6%89%BF%E7%9A%84%E5%8D%9A%E5%BC%88/"/>
     <id>http://blog.coryphaei.com/2016/01/05/Objective-C封装技巧（一）：Category和继承的博弈/</id>
     <published>2016-01-05T07:24:19.000Z</published>
-    <updated>2016-03-20T09:57:14.398Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h1&gt;&lt;p&gt;有经验的工程师在经历过一些项目之后，会慢慢的去考虑之前项目中遇到的坑，思考的过程中就会诞生设计模式和架构的雏形。我这次毕业设计的项目架构正在酝酿中，因为自己本身经验并没有很丰富，所以浅谈自己封装的一些想法，权当抛砖引玉。&lt;/p&gt;
 &lt;p&gt;平时项目中我们经常会对重复使用的代码进行封装，那么对于封装的场景是否有过思考？是否想过各种封装方法的使用场景和原则。我们实现提出在封装常用的方法：继承和Category。另外在继承的基础上我们发现了比继承更加灵活的Swizzling和在Category的使用过程出现的Associated Objects。关于上述的所有方法，我将会写一个系列来阐述。&lt;/p&gt;
@@ -595,7 +595,7 @@
     <link href="http://blog.coryphaei.com/2015/12/30/%E6%B5%85%E8%B0%88iOS%E4%B8%ADLibrary%E5%92%8CFramework/"/>
     <id>http://blog.coryphaei.com/2015/12/30/浅谈iOS中Library和Framework/</id>
     <published>2015-12-30T02:40:25.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h1&gt;&lt;p&gt;有关于库的出现场景，其实很简单的回答就是，不愿意把实现的源码暴露给其他人。虽然我是脑残的开源爱好者，但是总有些场景下，有这样的需求，比如外包公司的框架，比如我这次写NativeScript，需要自己将三方库打包然后使用在js中调用（当然后来我看到支持CocoaPods的时候，喷了一口老血）。不过这个是客观的一些原因，还有一些有想法的程序员，为了减少编译的时间，也会选择将改动不大的代码进行打包。打包好的代码是编译完成的二进制文件，在项目进行编译的时候链接上，确实一定程度的减少编译时间。&lt;/p&gt;
 &lt;h1 id=&quot;库的本质&quot;&gt;&lt;a href=&quot;#库的本质&quot; class=&quot;headerlink&quot; title=&quot;库的本质&quot;&gt;&lt;/a&gt;库的本质&lt;/h1&gt;&lt;p&gt;库的本质，我觉得非常好理解。我们首先要知道对于所有的库，都是进行编译的，而编译生成的其实是一段二进制代码。所以我们可以给库下个定义：&lt;/p&gt;
@@ -655,7 +655,7 @@
     <link href="http://blog.coryphaei.com/2015/12/24/Html5%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/"/>
     <id>http://blog.coryphaei.com/2015/12/24/Html5表单验证/</id>
     <published>2015-12-24T08:24:24.000Z</published>
-    <updated>2016-03-20T09:57:14.398Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h3 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h3&gt;&lt;p&gt;html5为我们提供了强大的校验功能，这无疑为我们手动写验证或者使用JQueryValide要方便的多，这里我们并不去缀述html5的自动校验功能，我们来说一下在ajax提交form表单的情况下验证失效的问题。众所周知，form表单的提交是带跳转的，如果不想刷新或者跳转页面的话，我们必须使用ajax来提交表单数据，这样的话又会带来一个问题，就是form表单的校验就会失效，这样的话html5强大的验证功能我们就失去了，怎么来解决这个办法呢？&lt;/p&gt;
 &lt;h3 id=&quot;问题分析&quot;&gt;&lt;a href=&quot;#问题分析&quot; class=&quot;headerlink&quot; title=&quot;问题分析&quot;&gt;&lt;/a&gt;问题分析&lt;/h3&gt;&lt;p&gt;我们知道，html5中form表单验证的触发是在表单提交的时候，在html中提交表单只需有个type=submit的button，在点击该button之后，便会触发表单验证以及向远端提交数据。一般情况下，我们在使用ajax提交表单的时候，坚听了一个type=button的button的点击事件，然后向远端传递一个序列化的表单数据，从始至终我们都没有看到form的submit()事件的触发，这是为什么我们表单验证失效的原因。&lt;/p&gt;
@@ -684,7 +684,7 @@
     <link href="http://blog.coryphaei.com/2015/12/23/Java8%20lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
     <id>http://blog.coryphaei.com/2015/12/23/Java8 lambda表达式/</id>
     <published>2015-12-23T05:46:00.000Z</published>
-    <updated>2016-03-20T09:57:14.398Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;Java8-lambda表达式&quot;&gt;&lt;a href=&quot;#Java8-lambda表达式&quot; class=&quot;headerlink&quot; title=&quot;Java8 lambda表达式&quot;&gt;&lt;/a&gt;Java8 lambda表达式&lt;/h1&gt;&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;RxJava的逻辑清晰的特点在Java8 lambda表达式下更加突出，学好RxJava必须熟悉lambda表达式。&lt;/p&gt;
 &lt;h2 id=&quot;本质&quot;&gt;&lt;a href=&quot;#本质&quot; class=&quot;headerlink&quot; title=&quot;本质&quot;&gt;&lt;/a&gt;本质&lt;/h2&gt;&lt;p&gt;lambda表达式的本质是一个匿名方法&lt;/p&gt;
@@ -749,7 +749,7 @@
     <link href="http://blog.coryphaei.com/2015/12/16/javascript%E4%B9%8Bpromise%E5%88%9D%E8%AF%86/"/>
     <id>http://blog.coryphaei.com/2015/12/16/javascript之promise初识/</id>
     <published>2015-12-16T09:30:34.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h3 id=&quot;promise是什么？&quot;&gt;&lt;a href=&quot;#promise是什么？&quot; class=&quot;headerlink&quot; title=&quot;promise是什么？&quot;&gt;&lt;/a&gt;promise是什么？&lt;/h3&gt;&lt;p&gt;在javascript promise机制出现之前，基于javascript的异步回调机制，当我们要顺序执行一段代码时，需要在异步回调里面执行代码，有时候需要在回调里面添加回调函数，如此一来，以前写代码之前代码是这样的：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;firstAsrc(function(item)&amp;#123;          //第一个异步回调函数&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    //coding do something&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    secondASrc(function(item)&amp;#123;    //第二个回掉函数&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        //coding do something&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;这还是只有两个回调函数，如果有十几个呢，我相信你就会疯了，至少我会。&lt;br&gt;所以，promise是用来解决javascript中层层异步调用，实现链式调用模式的一种机制。&lt;/p&gt;
@@ -781,7 +781,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/Objective-C%E6%96%B0%E7%BA%AA%E5%85%83--ReactiveCocoa%E6%A1%86%E6%9E%B6/"/>
     <id>http://blog.coryphaei.com/2015/12/15/Objective-C新纪元--ReactiveCocoa框架/</id>
     <published>2015-12-15T06:56:46.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;很久之前我就准备写有关于ReactiveCocoa的文章，前面林林总总写过几篇，但是都是简单的讲述，并没有深刻的去总结这个技术。根本的原因在于这个技术确实很难入门，但是ReactiveCocoa的出现确实可以给iOS带来很多新的思考和实现，ReactiveCocoa更加被Mattt Thompson大神称为开启一个新Objective-C纪元。另外提醒大家，我看到的优秀的讲ReactiveCocoa的文章篇幅都很长，其实大家都在简洁的语言来讲，我的这边文章应该写完也是长篇幅，希望大家可以耐心的看完。&lt;/p&gt;
 &lt;h1 id=&quot;函数响应式编程&quot;&gt;&lt;a href=&quot;#函数响应式编程&quot; class=&quot;headerlink&quot; title=&quot;函数响应式编程&quot;&gt;&lt;/a&gt;函数响应式编程&lt;/h1&gt;&lt;p&gt;ReactiveCocoa的基本思想就是&lt;code&gt;函数响应式编程（Function Reactive Programming，以下简称FRP）&lt;/code&gt;。FRP是一种响应变化的编程范式。我们通常会拿一个经典的例子来解释概念。&lt;/p&gt;
@@ -890,7 +890,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/RxJava%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%94)/"/>
     <id>http://blog.coryphaei.com/2015/12/15/RxJava学习笔记(五)/</id>
     <published>2015-12-15T05:42:20.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;RxJava笔记5&quot;&gt;&lt;a href=&quot;#RxJava笔记5&quot; class=&quot;headerlink&quot; title=&quot;RxJava笔记5&quot;&gt;&lt;/a&gt;RxJava笔记5&lt;/h1&gt;&lt;h2 id=&quot;场景举例&quot;&gt;&lt;a href=&quot;#场景举例&quot; class=&quot;headerlink&quot; title=&quot;场景举例&quot;&gt;&lt;/a&gt;场景举例&lt;/h2&gt;&lt;h3 id=&quot;场景1&quot;&gt;&lt;a href=&quot;#场景1&quot; class=&quot;headerlink&quot; title=&quot;场景1&quot;&gt;&lt;/a&gt;场景1&lt;/h3&gt;&lt;h4 id=&quot;需求：&quot;&gt;&lt;a href=&quot;#需求：&quot; class=&quot;headerlink&quot; title=&quot;需求：&quot;&gt;&lt;/a&gt;需求：&lt;/h4&gt;&lt;p&gt;1.有一字符串，每个字符都是一个数字&lt;/p&gt;
 &lt;p&gt;2.将字符串转化为数字&lt;/p&gt;
@@ -930,7 +930,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/RxJava%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%89)/"/>
     <id>http://blog.coryphaei.com/2015/12/15/RxJava学习笔记(三)/</id>
     <published>2015-12-15T05:40:20.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;RxJava笔记3&quot;&gt;&lt;a href=&quot;#RxJava笔记3&quot; class=&quot;headerlink&quot; title=&quot;RxJava笔记3&quot;&gt;&lt;/a&gt;RxJava笔记3&lt;/h1&gt;&lt;h2 id=&quot;变换&quot;&gt;&lt;a href=&quot;#变换&quot; class=&quot;headerlink&quot; title=&quot;变换&quot;&gt;&lt;/a&gt;变换&lt;/h2&gt;&lt;h3 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h3&gt;&lt;p&gt;变换，就是将时间序列中的对象或这个序列进行加工处理，转换成不同的事件或者事件序列。&lt;/p&gt;
 &lt;h3 id=&quot;实例代码&quot;&gt;&lt;a href=&quot;#实例代码&quot; class=&quot;headerlink&quot; title=&quot;实例代码&quot;&gt;&lt;/a&gt;实例代码&lt;/h3&gt;&lt;h4 id=&quot;map&quot;&gt;&lt;a href=&quot;#map&quot; class=&quot;headerlink&quot; title=&quot;map()&quot;&gt;&lt;/a&gt;map()&lt;/h4&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Observable.just(&lt;span class=&quot;string&quot;&gt;&quot;image/logo.png&quot;&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      .map(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; Func1&amp;lt;String, Bitmap&amp;gt;() &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;meta&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; Bitmap &lt;span class=&quot;title&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(String filepate)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;              &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; getBitmapFromFile(filepate);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      .subscribe(&lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; Action1&amp;lt;Bitmap&amp;gt;() &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;meta&quot;&gt;@Override&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;(Bitmap bitmap)&lt;/span&gt; &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;              showBitmap(bitmap);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
@@ -963,7 +963,7 @@
     <link href="http://blog.coryphaei.com/2015/12/15/RxJava%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)/"/>
     <id>http://blog.coryphaei.com/2015/12/15/RxJava学习笔记(一)/</id>
     <published>2015-12-15T04:27:20.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;RxJava笔记1&quot;&gt;&lt;a href=&quot;#RxJava笔记1&quot; class=&quot;headerlink&quot; title=&quot;RxJava笔记1&quot;&gt;&lt;/a&gt;RxJava笔记1&lt;/h1&gt;&lt;h2 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h2&gt;&lt;p&gt;很早以前就想去学一学RxJava这个既神秘又高大上的库，看过大头鬼的文章，限于自身水平原因一直看的迷迷糊糊晕头转向。刚找到扔物线写的文章，感觉突然茅塞顿开。 &lt;a href=&quot;http://gank.io/post/560e15be2dca930e00da1083#toc_5&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;扔物线文章地址&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&quot;RxJava是什么&quot;&gt;&lt;a href=&quot;#RxJava是什么&quot; class=&quot;headerlink&quot; title=&quot;RxJava是什么&quot;&gt;&lt;/a&gt;RxJava是什么&lt;/h2&gt;&lt;p&gt;一个实现异步操作的库&lt;/p&gt;
@@ -1005,7 +1005,7 @@
     <link href="http://blog.coryphaei.com/2015/12/11/%E4%BD%BF%E7%94%A8Travis%20CI%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BAHexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/"/>
     <id>http://blog.coryphaei.com/2015/12/11/使用Travis CI自动构建Hexo静态博客/</id>
     <published>2015-12-11T13:34:52.000Z</published>
-    <updated>2016-03-20T09:57:14.402Z</updated>
+    <updated>2016-03-20T10:03:39.725Z</updated>
     
     <content type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;随着现在open source越来越火，更多的人开始注重技术知识的获取。不可否认，目前的信息传播速度非常之快，渠道也非常之多，对于知识获取的整理和理解是很多人都在做的一件事情。在这种情况下更多的人开始选择写博客，把自己认知记录下来，一是为了检验自己对于技术的理解，二是为了让更多的人去从你的博客中获取到有用的信息。&lt;/p&gt;
 &lt;p&gt;我2014年的时候自己买了域名，用&lt;code&gt;jekyll + GitHub Pages&lt;/code&gt;搭建了自己的博客，有兴趣的可以访问我的&lt;a href=&quot;http://yeziahehe.com&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;博客&lt;/a&gt;。（目前正在考虑换到Hexo，而Coryphaei技术博客就是采用的Hexo）&lt;/p&gt;
