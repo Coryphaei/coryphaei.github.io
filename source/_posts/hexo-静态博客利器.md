@@ -2,7 +2,7 @@
 title: hexo 静态博客利器
 date: 2016-03-16 13:36:34
 tags: [hexo]
-categories: coding
+categories: twist.zheng
 ---
 
 ### 写在前面

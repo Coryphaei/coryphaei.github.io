@@ -2,7 +2,7 @@
 title: Maven之聚合和继承构建项目
 date: 2016-03-16 16:46:43
 tags: [Java,Maven]
-categories: coding
+categories: twist.zheng
 ---
 
 如果你是一个JAVA攻城狮，那么你还是有很大几率会接触到Maven的，Maven是apache旗下推出的项目构建和包管理工具，如果你对Maven是什么不太了解，我推荐你还是可以去看看它的[官网](http://maven.apache.org/)。这里我们就不再赘述（也许以后我还会出关于Maven的博客)。

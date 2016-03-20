@@ -2,7 +2,7 @@
 title: Java 模拟cpu线程调度
 date: 2016-03-16 17:41:53
 tags: [Java]
-categories: coding
+categories: twist.zheng
 ---
 
 ### 写在前面

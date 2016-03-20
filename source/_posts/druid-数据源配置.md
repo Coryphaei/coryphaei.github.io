@@ -2,7 +2,7 @@
 title: druid-数据源配置
 date: 2016-03-17 10:12:46
 tags: [Java]
-categories: coding
+categories: twist.zheng
 ---
 
 ### 写在前面
